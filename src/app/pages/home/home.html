@@ -1,0 +1,385 @@
+<div class="page-wrap">
+
+  <!-- NAVBAR -->
+  <nav class="navbar" [class.scrolled]="navScrolled">
+    <div class="nav-inner">
+      <a routerLink="/home" class="nav-brand">
+        <div class="nav-logo">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M11 4V2M11 20V18M18 11H20M2 11H4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="3" fill="white"/>
+          </svg>
+        </div>
+        <span class="nav-name">PayVault</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="#security" class="nav-link">Security</a>
+      </div>
+      <div class="nav-actions">
+        @if (isLoggedIn) {
+          <a routerLink="/dashboard" class="btn btn-outline btn-sm">Dashboard</a>
+          <a routerLink="/profile" class="btn btn-primary btn-sm">My Profile</a>
+        } @else {
+          <a routerLink="/login" class="btn btn-outline btn-sm">Log In</a>
+          <a routerLink="/signup" class="btn btn-primary btn-sm">Get Started</a>
+        }
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="mesh-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-inner">
+      <!-- Left -->
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          <span>Zero-fee transfers — live now</span>
+        </div>
+        <h1 class="hero-title">Send Money<br/><span class="grad-text">Instantly.</span><br/>Without Limits.</h1>
+        <p class="hero-sub">PayVault makes sending and receiving money as simple as texting. Instant transfers, real-time balance, and bank-grade security — all in one place.</p>
+        <div class="hero-actions">
+          @if (isLoggedIn) {
+            <a routerLink="/dashboard" class="btn btn-primary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="white"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="white"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="white"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="white"/></svg>
+              Go to Dashboard
+            </a>
+          } @else {
+            <a routerLink="/signup" class="btn btn-primary btn-lg">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3V15M3 9H15" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+              Open Free Account
+            </a>
+          }
+          <a href="#how" class="btn btn-outline btn-lg">See How It Works</a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-avatars">
+            <div class="trust-av">AK</div>
+            <div class="trust-av">PR</div>
+            <div class="trust-av">MS</div>
+            <div class="trust-av">RV</div>
+          </div>
+          <p class="trust-text"><strong>12,000+ people</strong> trust PayVault daily</p>
+        </div>
+      </div>
+
+      <!-- Right: 3D card -->
+      <div class="hero-right">
+        <div class="card-scene">
+          <div class="hero-card" id="hCard">
+            <div class="card-chip"></div>
+            <div class="card-lbl">Available Balance</div>
+            <div class="card-bal">₹24,850.00</div>
+            <div class="card-meta">
+              <div class="card-meta-item"><div class="lbl">Sent</div><div class="val val-green">₹8,240</div></div>
+              <div class="card-meta-item"><div class="lbl">Received</div><div class="val val-purple">₹15,000</div></div>
+            </div>
+            <div class="card-footer">
+              <div><div class="card-lbl">Holder</div><div class="card-name">RAHUL SHARMA</div></div>
+              <div style="text-align:right"><div class="card-lbl">Status</div><div style="font-size:.75rem;font-weight:700;color:#10B981">● ACTIVE</div></div>
+            </div>
+            <div class="card-num">•••• •••• •••• 4829</div>
+          </div>
+        </div>
+        <!-- Float cards -->
+        <div class="float-card float-card-1">
+          <div class="fi fi-g"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8L6 12L14 4" stroke="#10B981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div class="fl">Transfer Done</div><div class="fv fv-g">+₹5,000</div></div>
+        </div>
+        <div class="float-card float-card-2">
+          <div class="fi fi-p"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#6C63FF" stroke-width="1.5"/><path d="M8 5V8L10 10" stroke="#6C63FF" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div><div class="fl">Transfer speed</div><div class="fv">&#60; 2 sec</div></div>
+        </div>
+        <div class="float-card float-card-3">
+          <div class="fi fi-o"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.8 5.6L15 6.3L11.2 9.9L12.2 15L8 12.7L3.8 15L4.8 9.9L1 6.3L6.2 5.6L8 1Z" stroke="#F59E0B" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+          <div><div class="fl">Security Score</div><div class="fv">98 / 100</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-bar" id="statsBar">
+    <div class="stats-grid">
+      @for (stat of stats; track stat.id) {
+        <div class="stat-item">
+          <span class="stat-num">{{ stat.display }}</span>
+          <div class="stat-lbl">{{ stat.label }}</div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- FEATURES — 2×2 grid with scroll reveal -->
+  <section class="features" id="features">
+    <div class="feat-hdr">
+      <div class="sec-head">
+        <div class="section-tag rv">Why PayVault</div>
+        <h2 class="rv d1">Everything you need to manage money</h2>
+        <p class="rv d2">From instant transfers to smart notifications, PayVault puts you in complete control.</p>
+      </div>
+    </div>
+    <div class="feat-grid">
+
+      <div class="feat-card">
+        <div class="spotlight"></div>
+        <div class="feat-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="9" stroke="#6C63FF" stroke-width="1.8" opacity=".4"/>
+            <path d="M14 8V14L18 17" stroke="#6C63FF" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Instant Transfers</h3>
+        <p>Send money to anyone in seconds. Transfers complete before you even put your phone down.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="spotlight"></div>
+        <div class="feat-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <rect x="6" y="12" width="16" height="11" rx="3" stroke="#6C63FF" stroke-width="1.8"/>
+            <path d="M10 12V9C10 6.79 11.79 5 14 5C16.21 5 18 6.79 18 9V12" stroke="#6C63FF" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="14" cy="17.5" r="2" fill="#6C63FF"/>
+          </svg>
+        </div>
+        <h3>Bank-Grade Security</h3>
+        <p>256-bit encryption and real-time fraud detection protect every rupee in your wallet.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="spotlight"></div>
+        <div class="feat-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <path d="M14 3a7 7 0 00-7 7v5l-2 2v1h18v-1l-2-2v-5a7 7 0 00-7-7zM11 22a3 3 0 006 0" stroke="#6C63FF" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Smart Notifications</h3>
+        <p>Real-time alerts for every transaction. Know exactly when money moves in or out.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="spotlight"></div>
+        <div class="feat-icon">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <path d="M14 3L21 6V11C21 16 17.9 20.3 14 22C10.1 20.3 7 16 7 11V6L14 3Z" stroke="#6C63FF" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M10.5 14L13 16.5L17.5 11.5" stroke="#6C63FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Easy KYC Verification</h3>
+        <p>Verify your identity in minutes with Aadhaar &amp; PAN. Fully digital, fully paperless.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="sec-head rv" style="padding:0 24px 64px">
+      <div class="section-tag">How It Works</div>
+      <h2>Up and running in minutes</h2>
+      <p>Four simple steps from sign-up to your first transfer.</p>
+    </div>
+    <div class="steps-wrap">
+      <div class="v-line-track"><div class="v-line-fill"></div></div>
+
+      @for (step of steps; track step.num; let i = $index) {
+        <div class="step-row" [class.sl]="step.side === 'left'" [class.sr]="step.side === 'right'">
+          @if (step.side === 'left') {
+            <div class="step-left-card">
+              <div class="step-card">
+                <div class="step-card-ico" [class]="step.color">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="9" stroke="#6C63FF" stroke-width="1.6"/>
+                    <path d="M7 11L10 14L15 9" stroke="#6C63FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.desc }}</p>
+              </div>
+            </div>
+          } @else {
+            <div class="step-empty"></div>
+          }
+
+          <div class="step-node-col">
+            <div class="step-node">
+              <span class="step-num">{{ step.num }}</span>
+            </div>
+          </div>
+
+          @if (step.side === 'right') {
+            <div class="step-right-card">
+              <div class="step-card">
+                <div class="step-card-ico" [class]="step.color">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="9" stroke="#10B981" stroke-width="1.6"/>
+                    <path d="M7 11L10 14L15 9" stroke="#10B981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.desc }}</p>
+              </div>
+            </div>
+          } @else {
+            <div class="step-empty"></div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section class="trust-section" id="security">
+    <div class="trust-inner">
+      <div class="trust-left rl">
+        <div class="section-tag">Security First</div>
+        <h2 style="font-size:clamp(1.7rem,3vw,2.4rem);font-weight:800;line-height:1.2;margin:12px 0">Your money is protected at every level</h2>
+        <p>We use military-grade encryption and multi-layer authentication to ensure your funds are always safe.</p>
+        <div class="trust-checks">
+          <div class="tcheck">
+            <div class="tcheck-ico"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="8" width="16" height="11" rx="2.5" stroke="#6C63FF" stroke-width="1.6"/><path d="M7 8V6C7 3.79 8.79 2 11 2C13.21 2 15 3.79 15 6V8" stroke="#6C63FF" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+            <div><h4>256-bit Encryption</h4><p>All data encrypted in transit and at rest using AES-256.</p></div>
+          </div>
+          <div class="tcheck">
+            <div class="tcheck-ico"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5V10C19 15 15.4 19.3 11 21C6.6 19.3 3 15 3 10V5L11 2Z" stroke="#6C63FF" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <div><h4>KYC Verification</h4><p>Aadhaar &amp; PAN verification ensures every account is genuine.</p></div>
+          </div>
+          <div class="tcheck">
+            <div class="tcheck-ico"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#6C63FF" stroke-width="1.6"/><path d="M8 11L10.5 13.5L14.5 9" stroke="#6C63FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><h4>Real-time Fraud Detection</h4><p>AI-powered monitoring flags suspicious activity instantly.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="trust-visual rr">
+        <div class="score-wrap">
+          <div class="score-ring">
+            <div class="score-inner">
+              <div class="score-num">98</div>
+              <div class="score-sub">/ 100</div>
+            </div>
+          </div>
+          <div class="score-title">Security Score</div>
+          <div class="score-desc">Excellent — Top 1% of financial apps</div>
+        </div>
+        <div class="badges">
+          <div class="badge-item"><div class="bdot"></div><span class="blbl">SSL Certified</span></div>
+          <div class="badge-item"><div class="bdot"></div><span class="blbl">ISO 27001</span></div>
+          <div class="badge-item"><div class="bdot"></div><span class="blbl">RBI Compliant</span></div>
+          <div class="badge-item"><div class="bdot"></div><span class="blbl">PCI DSS</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="sec-head rv" style="padding:0 24px 64px">
+      <div class="section-tag">Testimonials</div>
+      <h2>Loved by thousands</h2>
+      <p>Don't take our word for it. Here's what our users say.</p>
+    </div>
+    <div class="testi-grid">
+      @for (t of testimonials; track t.name; let i = $index) {
+        <div class="tcard rv" [style.transition-delay]="(i * 0.15) + 's'">
+          <div class="tcard-top">
+            <div class="tav" [style.background]="'linear-gradient(135deg,#6C63FF,#8B5CF6)'">
+              <span class="tav-inner">{{ t.initials }}</span>
+            </div>
+            <div>
+              <div class="tname">{{ t.name }}</div>
+              <div class="trole">{{ t.role }}</div>
+            </div>
+          </div>
+          <div class="tstars">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+          <p class="tquote">"{{ t.quote }}"</p>
+          <div class="tbadge">{{ t.badge }}</div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-inner rv">
+      <div class="cta-tag">Start Today — Free Forever</div>
+      <h2>Ready to take control of your money?</h2>
+      <p>Join 50,000+ users who trust PayVault for instant, secure transfers.</p>
+      <div class="cta-acts">
+        @if (isLoggedIn) {
+          <a routerLink="/dashboard" class="btn btn-white btn-lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="#6C63FF"/><rect x="10" y="2" width="6" height="6" rx="1.5" fill="#6C63FF"/><rect x="2" y="10" width="6" height="6" rx="1.5" fill="#6C63FF"/><rect x="10" y="10" width="6" height="6" rx="1.5" fill="#6C63FF"/></svg>
+            Go to Dashboard
+          </a>
+        } @else {
+          <a routerLink="/signup" class="btn btn-white btn-lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3V15M3 9H15" stroke="#6C63FF" stroke-width="2.2" stroke-linecap="round"/></svg>
+            Create Free Account
+          </a>
+          <a routerLink="/login" class="btn btn-lg" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)">Log In</a>
+        }
+      </div>
+      <div class="cta-fine">No credit card required · Transfers start at ₹1 · Cancel anytime</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="fbrand-name">
+          <div class="nav-logo" style="width:32px;height:32px;border-radius:8px">
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none"><path d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="11" r="3" fill="white"/></svg>
+          </div>
+          PayVault
+        </div>
+        <p>The modern digital wallet for instant, secure money transfers across India.</p>
+      </div>
+      <div class="fcol">
+        <h5>Product</h5>
+        <div class="flinks">
+          <a href="#features" class="flink">Features</a>
+          <a href="#how" class="flink">How It Works</a>
+          <a href="#security" class="flink">Security</a>
+        </div>
+      </div>
+      <div class="fcol">
+        <h5>Account</h5>
+        <div class="flinks">
+          @if (isLoggedIn) {
+            <a routerLink="/dashboard" class="flink">Dashboard</a>
+            <a routerLink="/profile" class="flink">My Profile</a>
+          } @else {
+            <a routerLink="/signup" class="flink">Sign Up Free</a>
+            <a routerLink="/login" class="flink">Log In</a>
+          }
+        </div>
+      </div>
+      <div class="fcol">
+        <h5>Legal</h5>
+        <div class="flinks">
+          <a href="#" class="flink">Privacy Policy</a>
+          <a href="#" class="flink">Terms of Service</a>
+          <a href="#" class="flink">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span class="fcopy">© 2026 PayVault. All rights reserved.</span>
+      <div class="fsocs">
+        <a href="#" class="fsoc"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 1010 0A5 5 0 003 8zm5-2v4m-2-2h4" stroke="rgba(255,255,255,.5)" stroke-width="1.4" stroke-linecap="round"/></svg></a>
+        <a href="#" class="fsoc"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="3" width="10" height="10" rx="3" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/><circle cx="8" cy="8" r="2.5" stroke="rgba(255,255,255,.5)" stroke-width="1.4"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+</div>

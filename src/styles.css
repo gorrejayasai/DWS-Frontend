@@ -1,0 +1,43 @@
+/* PayVault — Global Styles */
+:root {
+  --brand: #6C63FF;
+  --brand-mid: #8B5CF6;
+  --brand-light: #C4B5FD;
+  --page: #F7F5FF;
+  --card: #fff;
+  --text: #1A1340;
+  --text-2: #5C5480;
+  --text-3: #9C94C0;
+  --dark: #0F0C29;
+  --border: rgba(108, 99, 255, .14);
+  --success: #10B981;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --radius: 14px;
+  --shadow-sm: 0 2px 12px rgba(108, 99, 255, .08);
+  --shadow-md: 0 8px 32px rgba(108, 99, 255, .14);
+  --sidebar-w: 260px;
+  --nav-h: 68px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 92px;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--page);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; }

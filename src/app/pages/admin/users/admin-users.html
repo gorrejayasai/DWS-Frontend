@@ -1,0 +1,172 @@
+<div class="layout">
+  <div class="sb-overlay" [class.open]="sidebarExpanded" (click)="toggleSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" [class.expanded]="sidebarExpanded">
+    <div class="sb-logo">
+      <div class="sb-logo-icon"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="11" r="3" fill="white"/></svg></div>
+      <span class="sb-logo-text">Pay<span>Vault</span></span>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section-label">Overview</div>
+      <a routerLink="/admin/dashboard" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><rect x="1" y="1" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="10" y="1" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="1" y="10" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="10" y="10" width="7" height="7" rx="2" stroke-width="1.6"/></svg>
+        <span class="sb-label">Dashboard</span>
+      </a>
+      <div class="sb-section-label">Management</div>
+      <a routerLink="/admin/users" class="sb-item active">
+        <svg class="sb-icon" viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Users</span>
+      </a>
+      <a routerLink="/admin/kyc" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M9 1L16 4V8C16 12.4 12.9 16.3 9 18C5.1 16.3 2 12.4 2 8V4L9 1Z" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span class="sb-label">KYC</span>
+      </a>
+      <a routerLink="/admin/transactions" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M3 5h12M3 9h8M3 13h5" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Transactions</span>
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section-label">System</div>
+      <a routerLink="/admin/health" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M2 9h3l2-5 2 10 2-6 2 3h3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="sb-label">Health</span>
+      </a>
+      <a routerLink="/admin/settings" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.5" stroke-width="1.6"/><path d="M9 2v1M9 15v1M2 9h1M15 9h1M4.2 4.2l.7.7M13.1 13.1l.7.7M4.2 13.8l.7-.7M13.1 4.9l.7-.7" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Settings</span>
+      </a>
+    </nav>
+    <div class="sb-user">
+      <div class="sb-avatar">{{ initials }}</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">{{ username }}</div>
+        <div class="sb-user-role">Administrator</div>
+      </div>
+      <div class="sb-logout" (click)="logout()" title="Logout">
+        <svg viewBox="0 0 14 14"><path d="M5 2H2a1 1 0 00-1 1v8a1 1 0 001 1h3M9 10l4-3-4-3M5 7h8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="hamburger" (click)="toggleSidebar()">
+        <svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+      </div>
+      <div>
+        <div class="topbar-title">User Management</div>
+        <div class="topbar-sub">Manage all registered users</div>
+      </div>
+      <div class="topbar-right">
+        <span class="admin-badge">ADMIN</span>
+        <div class="topbar-av">{{ initials }}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- MINI STATS -->
+      <div class="mini-stats">
+        <div class="mini-card">
+          <div class="mini-icon mi-purple">
+            <svg viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <div class="mini-info">
+            <div class="mini-label">Total Users</div>
+            <div class="mini-val">{{ totalElements }}</div>
+          </div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-icon mi-green">
+            <svg viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/><path d="M12 10l2 2 3-3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="mini-info">
+            <div class="mini-label">Active Users</div>
+            <div class="mini-val">{{ activeUsers }}</div>
+          </div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-icon mi-blue">
+            <svg viewBox="0 0 18 18"><rect x="2" y="2" width="14" height="14" rx="3" stroke-width="1.6"/><path d="M5 9h8M5 6h8M5 12h5" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <div class="mini-info">
+            <div class="mini-label">Page {{ currentPage + 1 }} / {{ totalPages || 1 }}</div>
+            <div class="mini-val">{{ pageSize }} per page</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="chips">
+          <button class="chip" [class.chip-active]="filterStatus==='ALL'" (click)="setFilter('ALL')">All</button>
+          <button class="chip" [class.chip-active]="filterStatus==='ACTIVE'" (click)="setFilter('ACTIVE')">Active</button>
+          <button class="chip" [class.chip-active]="filterStatus==='DELETED'" (click)="setFilter('DELETED')">Deleted</button>
+        </div>
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5" stroke-width="1.6"/><path d="M10 10l3.5 3.5" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input class="search-input" type="text" placeholder="Search username or email…" [(ngModel)]="searchTerm" />
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card">
+        <div class="table-wrap">
+          @if (filteredUsers.length === 0) {
+            <div class="empty-row">No users found</div>
+          } @else {
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (u of filteredUsers; track u.id) {
+                  <tr>
+                    <td>
+                      <div class="user-cell">
+                        <div class="u-av">{{ userInitials(u.username) }}</div>
+                        <span class="u-name">{{ u.username }}</span>
+                      </div>
+                    </td>
+                    <td class="text-muted">{{ u.email }}</td>
+                    <td><span class="role-badge">{{ u.role }}</span></td>
+                    <td>
+                      @if (u.status === 'ACTIVE') {
+                        <span class="badge st-active">ACTIVE</span>
+                      } @else if (u.status === 'DELETED') {
+                        <span class="badge st-deleted">DELETED</span>
+                      } @else {
+                        <span class="badge st-other">{{ u.status }}</span>
+                      }
+                    </td>
+                    <td class="text-muted">{{ fmtDate(u.createdAt) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <button class="pg-btn" [disabled]="currentPage === 0" (click)="prevPage()">
+          <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Prev
+        </button>
+        <span class="pg-info">Page {{ currentPage + 1 }} of {{ totalPages || 1 }}</span>
+        <button class="pg-btn" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">
+          Next
+          <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

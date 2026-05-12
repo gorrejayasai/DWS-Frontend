@@ -1,0 +1,129 @@
+<div class="layout">
+  <div class="sb-overlay" [class.open]="sidebarExpanded" (click)="toggleSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" [class.expanded]="sidebarExpanded">
+    <div class="sb-logo">
+      <div class="sb-logo-icon"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="11" r="3" fill="white"/></svg></div>
+      <span class="sb-logo-text">Pay<span>Vault</span></span>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section-label">Overview</div>
+      <a routerLink="/admin/dashboard" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><rect x="1" y="1" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="10" y="1" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="1" y="10" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="10" y="10" width="7" height="7" rx="2" stroke-width="1.6"/></svg>
+        <span class="sb-label">Dashboard</span>
+      </a>
+      <div class="sb-section-label">Management</div>
+      <a routerLink="/admin/users" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Users</span>
+      </a>
+      <a routerLink="/admin/kyc" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M9 1L16 4V8C16 12.4 12.9 16.3 9 18C5.1 16.3 2 12.4 2 8V4L9 1Z" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span class="sb-label">KYC</span>
+      </a>
+      <a routerLink="/admin/transactions" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M3 5h12M3 9h8M3 13h5" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Transactions</span>
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section-label">System</div>
+      <a routerLink="/admin/health" class="sb-item active">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M2 9h3l2-5 2 10 2-6 2 3h3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="sb-label">Health</span>
+      </a>
+      <a routerLink="/admin/settings" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.5" stroke-width="1.6"/><path d="M9 2v1M9 15v1M2 9h1M15 9h1M4.2 4.2l.7.7M13.1 13.1l.7.7M4.2 13.8l.7-.7M13.1 4.9l.7-.7" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Settings</span>
+      </a>
+    </nav>
+    <div class="sb-user">
+      <div class="sb-avatar">{{ initials }}</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">{{ username }}</div>
+        <div class="sb-user-role">Administrator</div>
+      </div>
+      <div class="sb-logout" (click)="logout()" title="Logout">
+        <svg viewBox="0 0 14 14"><path d="M5 2H2a1 1 0 00-1 1v8a1 1 0 001 1h3M9 10l4-3-4-3M5 7h8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="hamburger" (click)="toggleSidebar()">
+        <svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+      </div>
+      <div>
+        <div class="topbar-title">System Health</div>
+        <div class="topbar-sub">Monitor microservice status</div>
+      </div>
+      <div class="topbar-right">
+        <span class="admin-badge">ADMIN</span>
+        <div class="topbar-av">{{ initials }}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- STATUS BANNER -->
+      @if (allUp) {
+        <div class="banner banner-ok">
+          <svg viewBox="0 0 20 20"><path d="M4 10l4 4 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div>
+            <div class="banner-title">All Systems Operational</div>
+            <div class="banner-sub">All {{ services.length }} services are running normally</div>
+          </div>
+        </div>
+      } @else {
+        <div class="banner banner-warn">
+          <svg viewBox="0 0 20 20"><path d="M10 6v5M10 14h.01" stroke-width="2" stroke-linecap="round"/><path d="M2 17L10 3l8 14H2Z" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <div>
+            <div class="banner-title">System Degraded</div>
+            <div class="banner-sub">{{ downCount }} service(s) are experiencing issues</div>
+          </div>
+        </div>
+      }
+
+      <!-- SUMMARY ROW -->
+      <div class="summary-row">
+        <div class="sum-pill sum-up">
+          <span class="dot dot-up"></span>
+          {{ upCount }} / {{ services.length }} Services Up
+        </div>
+        @if (downCount > 0) {
+          <div class="sum-pill sum-down">
+            <span class="dot dot-down"></span>
+            {{ downCount }} Down
+          </div>
+        }
+      </div>
+
+      <!-- SERVICE GRID -->
+      <div class="service-grid">
+        @for (svc of services; track svc.name) {
+          <div class="svc-card" [class.svc-down]="svc.status !== 'UP'">
+            <div class="svc-header">
+              <div class="svc-name">{{ svc.name }}</div>
+              @if (svc.status === 'UP') {
+                <span class="svc-badge badge-up">UP</span>
+              } @else {
+                <span class="svc-badge badge-down">DOWN</span>
+              }
+            </div>
+            <div class="svc-port">Port {{ svc.port }}</div>
+            <div class="svc-status-row">
+              @if (svc.status === 'UP') {
+                <span class="status-dot dot-up"></span>
+                <span class="status-text text-up">Operational</span>
+              } @else {
+                <span class="status-dot dot-down"></span>
+                <span class="status-text text-down">Unavailable</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

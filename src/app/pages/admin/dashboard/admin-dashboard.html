@@ -1,0 +1,143 @@
+<div class="layout">
+  <!-- OVERLAY -->
+  <div class="sb-overlay" [class.open]="sidebarExpanded" (click)="toggleSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" [class.expanded]="sidebarExpanded">
+    <div class="sb-logo">
+      <div class="sb-logo-icon"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="11" r="3" fill="white"/></svg></div>
+      <span class="sb-logo-text">Pay<span>Vault</span></span>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section-label">Overview</div>
+      <a routerLink="/admin/dashboard" class="sb-item active">
+        <svg class="sb-icon" viewBox="0 0 18 18"><rect x="1" y="1" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="10" y="1" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="1" y="10" width="7" height="7" rx="2" stroke-width="1.6"/><rect x="10" y="10" width="7" height="7" rx="2" stroke-width="1.6"/></svg>
+        <span class="sb-label">Dashboard</span>
+      </a>
+      <div class="sb-section-label">Management</div>
+      <a routerLink="/admin/users" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Users</span>
+      </a>
+      <a routerLink="/admin/kyc" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M9 1L16 4V8C16 12.4 12.9 16.3 9 18C5.1 16.3 2 12.4 2 8V4L9 1Z" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span class="sb-label">KYC</span>
+        <span class="sb-badge">{{ pendingKyc }}</span>
+      </a>
+      <a routerLink="/admin/transactions" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M3 5h12M3 9h8M3 13h5" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Transactions</span>
+      </a>
+      <div class="sb-divider"></div>
+      <div class="sb-section-label">System</div>
+      <a routerLink="/admin/health" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><path d="M2 9h3l2-5 2 10 2-6 2 3h3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="sb-label">Health</span>
+      </a>
+      <a routerLink="/admin/settings" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.5" stroke-width="1.6"/><path d="M9 2v1M9 15v1M2 9h1M15 9h1M4.2 4.2l.7.7M13.1 13.1l.7.7M4.2 13.8l.7-.7M13.1 4.9l.7-.7" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Settings</span>
+      </a>
+    </nav>
+    <div class="sb-user">
+      <div class="sb-avatar">{{ initials }}</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">{{ username }}</div>
+        <div class="sb-user-role">Administrator</div>
+      </div>
+      <div class="sb-logout" (click)="logout()" title="Logout">
+        <svg viewBox="0 0 14 14"><path d="M5 2H2a1 1 0 00-1 1v8a1 1 0 001 1h3M9 10l4-3-4-3M5 7h8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="hamburger" (click)="toggleSidebar()">
+        <svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+      </div>
+      <div>
+        <div class="topbar-title">Admin Dashboard</div>
+        <div class="topbar-sub">Welcome back, {{ username }}</div>
+      </div>
+      <div class="topbar-right">
+        <span class="admin-badge">ADMIN</span>
+        <div class="topbar-av">{{ initials }}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon si-purple"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div class="stat-info"><div class="stat-label">Total Users</div><div class="stat-value">{{ totalUsers }}</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-orange"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          <div class="stat-info"><div class="stat-label">Pending KYC</div><div class="stat-value">{{ pendingKyc }}</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-blue"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 7h14M4 11h10M4 15h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div class="stat-info"><div class="stat-label">Transactions</div><div class="stat-value">{{ totalTransactions }}</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon si-green"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4v14M4 11h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="stat-info"><div class="stat-label">System Status</div><div class="stat-value" style="font-size:1rem;color:#10B981">● Online</div></div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="main-grid">
+        <!-- Recent Transactions -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Transactions</span>
+            <a routerLink="/admin/transactions" class="card-link">View all →</a>
+          </div>
+          <div class="table-wrap">
+            @if (recentTransactions.length === 0) {
+              <div class="empty-row">No transactions yet</div>
+            } @else {
+              <table>
+                <thead><tr><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody>
+                  @for (tx of recentTransactions; track tx.id) {
+                    <tr>
+                      <td>{{ tx.type | titlecase }}</td>
+                      <td><span [class]="txAmtClass(tx.type)">{{ txSign(tx.type) }}{{ fmt(tx.amount) }}</span></td>
+                      <td><span class="badge" [class]="statusClass(tx.status)">{{ tx.status }}</span></td>
+                      <td>{{ fmtDate(tx.createdAt) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          </div>
+        </div>
+
+        <!-- Recent Users -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recent Users</span>
+            <a routerLink="/admin/users" class="card-link">View all →</a>
+          </div>
+          @for (u of recentUsers; track u.id) {
+            <div class="user-row">
+              <div class="u-av">{{ u.username.slice(0,2).toUpperCase() }}</div>
+              <div class="u-info">
+                <div class="u-name">{{ u.username }}</div>
+                <div class="u-email">{{ u.email }}</div>
+              </div>
+              <span class="role-badge">{{ u.role }}</span>
+            </div>
+          }
+          @if (recentUsers.length === 0) {
+            <div class="empty-row">No users yet</div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

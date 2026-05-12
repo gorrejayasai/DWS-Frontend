@@ -1,0 +1,51 @@
+:host{display:block}
+*,*::before,*::after{box-sizing:border-box}
+a{text-decoration:none;color:inherit}
+.layout{display:flex;min-height:100vh;background:#F7F5FF;font-family:'Plus Jakarta Sans',sans-serif;color:#1A1340}
+.sidebar{width:260px;background:#0F0C29;height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.05)}
+.sb-logo{width:36px;height:36px;background:linear-gradient(135deg,#6C63FF,#8B5CF6);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-name{font-size:1.125rem;font-weight:800;color:#fff}
+.sb-nav{flex:1;padding:16px 12px;overflow-y:auto}
+.sb-section{font-size:.625rem;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.12em;text-transform:uppercase;padding:0 8px;margin:16px 0 8px}
+.sb-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:.9rem;font-weight:600;color:rgba(255,255,255,.5);transition:all .2s;cursor:pointer;margin-bottom:2px}
+.sb-link:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.sb-link.active{background:linear-gradient(135deg,rgba(108,99,255,.25),rgba(139,92,246,.2));color:#fff;box-shadow:inset 0 0 0 1px rgba(108,99,255,.25)}
+.sb-user{padding:16px;border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px}
+.sb-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;flex-shrink:0}
+.sb-uname{font-size:.875rem;font-weight:700;color:#fff}
+.sb-uemail{font-size:.7rem;color:rgba(255,255,255,.35)}
+.main{margin-left:260px;flex:1;display:flex;flex-direction:column}
+.topbar{height:68px;background:#fff;border-bottom:1px solid rgba(108,99,255,.12);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:50}
+.topbar h1{font-size:1.125rem;font-weight:800}
+.topbar p{font-size:.8125rem;color:#9C94C0}
+.topbar-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff}
+.content{padding:32px;flex:1;max-width:860px}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:8px;margin-bottom:24px;background:#fff;padding:6px;border-radius:14px;border:1px solid rgba(108,99,255,.12);width:fit-content}
+.ftab{padding:9px 20px;border-radius:10px;font-size:.875rem;font-weight:700;color:#5C5480;cursor:pointer;transition:all .2s;font-family:inherit;border:none;background:transparent}
+.ftab:hover{background:rgba(108,99,255,.06);color:#6C63FF}
+.ftab.active{background:#6C63FF;color:#fff;box-shadow:0 4px 12px rgba(108,99,255,.3)}
+
+/* NOTIF GROUP */
+.notif-group{margin-bottom:24px}
+.group-label{font-size:.75rem;font-weight:700;color:#9C94C0;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.notif-card{background:#fff;border:1px solid rgba(108,99,255,.1);border-radius:16px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;margin-bottom:8px;transition:transform .2s,box-shadow .2s;cursor:pointer}
+.notif-card:hover{transform:translateX(4px);box-shadow:0 2px 12px rgba(108,99,255,.08)}
+.notif-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-body{flex:1;min-width:0}
+.notif-title{font-size:.9375rem;font-weight:700;color:#1A1340;margin-bottom:4px}
+.notif-desc{font-size:.875rem;color:#5C5480;line-height:1.55}
+.notif-time{font-size:.75rem;color:#9C94C0;margin-top:6px;display:flex;align-items:center;gap:6px}
+.notif-amt{font-size:.9375rem;font-weight:800;white-space:nowrap;margin-top:2px;flex-shrink:0}
+.amt-pos{color:#10B981}
+.amt-neg{color:#EF4444}
+
+/* STATES */
+.loading-state{display:flex;align-items:center;justify-content:center;gap:12px;padding:60px;color:#9C94C0}
+.spinner{width:36px;height:36px;border:3px solid rgba(108,99,255,.15);border-top-color:#6C63FF;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:60px 0}
+.empty-state h3{font-size:1.125rem;font-weight:700;margin:16px 0 8px}
+.empty-state p{font-size:.9rem;color:#9C94C0}
