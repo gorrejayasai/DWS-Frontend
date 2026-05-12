@@ -95,7 +95,9 @@ export class TransactionsComponent implements OnInit {
   }
 
   fmtDate(d: string): string {
+    if (!d) return '—';
     const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
     const today = new Date();
     if (dt.toDateString() === today.toDateString()) {
       return 'Today, ' + dt.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });

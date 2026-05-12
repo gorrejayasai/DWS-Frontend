@@ -25,6 +25,12 @@ export class AdminKycComponent implements OnInit {
   kycList: KycResponse[] = [];
   totalElements = 0;
   filterStatus = 'ALL';
+  listLoading = false;
+  listError = '';
+
+  actionLoading = false;
+  actionError = '';
+  actionSuccess = '';
 
   showRejectModal = false;
   rejectUserId = 0;
@@ -37,12 +43,18 @@ export class AdminKycComponent implements OnInit {
   }
 
   loadKyc(): void {
+    this.listLoading = true;
+    this.listError = '';
     this.adminSvc.getAllKyc().subscribe({
       next: list => {
         this.kycList = list;
         this.totalElements = list.length;
+        this.listLoading = false;
       },
-      error: () => {}
+      error: () => {
+        this.listError = 'Failed to load KYC records.';
+        this.listLoading = false;
+      }
     });
   }
 
@@ -58,7 +70,22 @@ export class AdminKycComponent implements OnInit {
   setFilter(f: string): void { this.filterStatus = f; }
 
   approve(userId: number): void {
-    this.adminSvc.approveKyc(userId).subscribe({ next: () => this.loadKyc(), error: () => {} });
+    this.actionLoading = true;
+    this.actionError = '';
+    this.actionSuccess = '';
+    this.adminSvc.approveKyc(userId).subscribe({
+      next: () => {
+        this.actionLoading = false;
+        this.actionSuccess = `KYC for User #${userId} approved.`;
+        this.loadKyc();
+        setTimeout(() => this.actionSuccess = '', 3000);
+      },
+      error: (err) => {
+        this.actionLoading = false;
+        this.actionError = err?.error?.message ?? `Failed to approve KYC for User #${userId}.`;
+        setTimeout(() => this.actionError = '', 4000);
+      }
+    });
   }
 
   openRejectModal(userId: number): void {
@@ -69,9 +96,24 @@ export class AdminKycComponent implements OnInit {
 
   confirmReject(): void {
     if (!this.rejectRemarks.trim()) return;
-    this.adminSvc.rejectKyc(this.rejectUserId, this.rejectRemarks).subscribe({
-      next: () => { this.closeModal(); this.loadKyc(); },
-      error: () => {}
+    this.actionLoading = true;
+    this.actionError = '';
+    this.actionSuccess = '';
+    const uid = this.rejectUserId;
+    this.adminSvc.rejectKyc(uid, this.rejectRemarks.trim()).subscribe({
+      next: () => {
+        this.actionLoading = false;
+        this.actionSuccess = `KYC for User #${uid} rejected.`;
+        this.closeModal();
+        this.loadKyc();
+        setTimeout(() => this.actionSuccess = '', 3000);
+      },
+      error: (err) => {
+        this.actionLoading = false;
+        this.actionError = err?.error?.message ?? `Failed to reject KYC for User #${uid}.`;
+        this.closeModal();
+        setTimeout(() => this.actionError = '', 4000);
+      }
     });
   }
 

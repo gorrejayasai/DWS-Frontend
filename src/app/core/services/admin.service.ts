@@ -44,8 +44,9 @@ export class AdminService {
   }
 
   // Correct URLs: /kyc/admin/approve/{userId}  and  /kyc/admin/reject/{userId}
+  // remarks is optional on approve — send null to avoid @NotBlank failure on empty string
   approveKyc(userId: number): Observable<any> {
-    return this.http.put(`${this.BASE}/kyc/admin/approve/${userId}`, { remarks: '' });
+    return this.http.put(`${this.BASE}/kyc/admin/approve/${userId}`, { remarks: null });
   }
 
   rejectKyc(userId: number, remarks: string): Observable<any> {

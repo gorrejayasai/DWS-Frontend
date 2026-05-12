@@ -109,7 +109,8 @@ export class KycComponent implements OnInit {
       ]
     };
 
-    const isUpdate = this.kyc?.status === 'PENDING' || this.kyc?.status === 'REJECTED';
+    // PENDING is now locked (form hidden), so only REJECTED reaches here as an update
+    const isUpdate = this.kyc?.status === 'REJECTED';
     const call = isUpdate ? this.kycSvc.updateKyc(payload) : this.kycSvc.submitKyc(payload);
 
     call.subscribe({
@@ -123,9 +124,10 @@ export class KycComponent implements OnInit {
       error: err => {
         this.loading = false;
         const body = err.error;
-        if (body?.message)                    this.errorMsg = body.message;
+        if (err.status === 403)               this.errorMsg = 'Resubmission is temporarily unavailable. Please contact support.';
+        else if (body?.message)               this.errorMsg = body.message;
         else if (typeof body === 'string')    this.errorMsg = body;
-        else if (err.status === 409)          this.errorMsg = 'KYC already submitted.';
+        else if (err.status === 409)          this.errorMsg = 'A KYC record already exists. Please contact support if you cannot resubmit.';
         else                                  this.errorMsg = 'Submission failed. Please try again.';
       }
     });

@@ -125,7 +125,9 @@ export class DashboardComponent implements OnInit {
   }
 
   formatDate(d: string): string {
+    if (!d) return '—';
     const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
     const today = new Date();
     const isToday = dt.toDateString() === today.toDateString();
     if (isToday) {

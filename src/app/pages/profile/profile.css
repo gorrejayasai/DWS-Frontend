@@ -105,8 +105,9 @@
   display: inline-flex; align-items: center; gap: 6px;
   padding: 5px 12px; border-radius: 20px; font-size: .75rem; font-weight: 700; margin-bottom: 24px;
 }
-.badge-pending { background: rgba(245,158,11,.1); color: #F59E0B; border: 1px solid rgba(245,158,11,.2); }
-.badge-active { background: rgba(16,185,129,.1); color: #10B981; border: 1px solid rgba(16,185,129,.2); }
+.badge-pending  { background: rgba(245,158,11,.1);  color: #F59E0B;  border: 1px solid rgba(245,158,11,.2); }
+.badge-active   { background: rgba(16,185,129,.1);  color: #10B981;  border: 1px solid rgba(16,185,129,.2); }
+.badge-rejected { background: rgba(239,68,68,.08);  color: #EF4444;  border: 1px solid rgba(239,68,68,.2); }
 .profile-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .ps { background: var(--page); border-radius: 12px; padding: 14px; border: 1px solid var(--border); }
 .ps-val { font-size: 1.125rem; font-weight: 800; color: var(--text); letter-spacing: -.02em; }

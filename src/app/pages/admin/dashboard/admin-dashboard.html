@@ -72,15 +72,15 @@
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon si-purple"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-          <div class="stat-info"><div class="stat-label">Total Users</div><div class="stat-value">{{ totalUsers }}</div></div>
+          <div class="stat-info"><div class="stat-label">Wallet Users</div><div class="stat-value">{{ totalUsers }}</div></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon si-orange"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
           <div class="stat-info"><div class="stat-label">Pending KYC</div><div class="stat-value">{{ pendingKyc }}</div></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon si-blue"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 7h14M4 11h10M4 15h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-          <div class="stat-info"><div class="stat-label">Transactions</div><div class="stat-value">{{ totalTransactions }}</div></div>
+          <div class="stat-icon si-blue"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          <div class="stat-info"><div class="stat-label">Total KYC</div><div class="stat-value">{{ totalKyc }}</div></div>
         </div>
         <div class="stat-card">
           <div class="stat-icon si-green"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4v14M4 11h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -90,25 +90,25 @@
 
       <!-- MAIN GRID -->
       <div class="main-grid">
-        <!-- Recent Transactions -->
+        <!-- Recent KYC Submissions -->
         <div class="card">
           <div class="card-header">
-            <span class="card-title">Recent Transactions</span>
-            <a routerLink="/admin/transactions" class="card-link">View all →</a>
+            <span class="card-title">Recent KYC Submissions</span>
+            <a routerLink="/admin/kyc" class="card-link">View all →</a>
           </div>
           <div class="table-wrap">
-            @if (recentTransactions.length === 0) {
-              <div class="empty-row">No transactions yet</div>
+            @if (recentKyc.length === 0) {
+              <div class="empty-row">No KYC submissions yet</div>
             } @else {
               <table>
-                <thead><tr><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <thead><tr><th>User ID</th><th>Status</th><th>Documents</th><th>Submitted</th></tr></thead>
                 <tbody>
-                  @for (tx of recentTransactions; track tx.id) {
+                  @for (k of recentKyc; track k.id) {
                     <tr>
-                      <td>{{ tx.type | titlecase }}</td>
-                      <td><span [class]="txAmtClass(tx.type)">{{ txSign(tx.type) }}{{ fmt(tx.amount) }}</span></td>
-                      <td><span class="badge" [class]="statusClass(tx.status)">{{ tx.status }}</span></td>
-                      <td>{{ fmtDate(tx.createdAt) }}</td>
+                      <td class="uid-cell">#{{ k.userId }}</td>
+                      <td><span class="badge" [class]="kycStatusClass(k.status)">{{ k.status }}</span></td>
+                      <td>{{ k.documents?.length ?? 0 }}</td>
+                      <td>{{ fmtDate(k.submittedAt) }}</td>
                     </tr>
                   }
                 </tbody>
@@ -117,25 +117,34 @@
           </div>
         </div>
 
-        <!-- Recent Users -->
+        <!-- KYC Summary -->
         <div class="card">
           <div class="card-header">
-            <span class="card-title">Recent Users</span>
-            <a routerLink="/admin/users" class="card-link">View all →</a>
+            <span class="card-title">KYC Overview</span>
+            <a routerLink="/admin/users" class="card-link">User view →</a>
           </div>
-          @for (u of recentUsers; track u.id) {
-            <div class="user-row">
-              <div class="u-av">{{ u.username.slice(0,2).toUpperCase() }}</div>
-              <div class="u-info">
-                <div class="u-name">{{ u.username }}</div>
-                <div class="u-email">{{ u.email }}</div>
-              </div>
-              <span class="role-badge">{{ u.role }}</span>
+          <div class="kyc-summary">
+            <div class="ks-row">
+              <div class="ks-dot ks-pend"></div>
+              <span class="ks-label">Pending Review</span>
+              <span class="ks-val">{{ pendingKyc }}</span>
             </div>
-          }
-          @if (recentUsers.length === 0) {
-            <div class="empty-row">No users yet</div>
-          }
+            <div class="ks-row">
+              <div class="ks-dot ks-ok"></div>
+              <span class="ks-label">Approved</span>
+              <span class="ks-val">{{ approvedKyc }}</span>
+            </div>
+            <div class="ks-row">
+              <div class="ks-dot ks-fail"></div>
+              <span class="ks-label">Rejected</span>
+              <span class="ks-val">{{ rejectedKyc }}</span>
+            </div>
+            <div class="ks-row ks-total">
+              <div class="ks-dot" style="background:#6C63FF"></div>
+              <span class="ks-label">Total Submissions</span>
+              <span class="ks-val">{{ totalKyc }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

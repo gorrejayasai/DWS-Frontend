@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { AdminService } from '../../../core/services/admin.service';
+import { TransactionService } from '../../../core/services/transaction.service';
 
 @Component({
   selector: 'app-admin-transactions',
@@ -13,49 +14,86 @@ import { AdminService } from '../../../core/services/admin.service';
   styleUrl: './admin-transactions.css'
 })
 export class AdminTransactionsComponent implements OnInit {
-  private auth = inject(AuthService);
+  private auth     = inject(AuthService);
   private adminSvc = inject(AdminService);
+  private txSvc    = inject(TransactionService);
 
   username = '';
   get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'A'; }
 
   sidebarExpanded = false;
 
-  transactions: any[] = [];
-  totalElements = 0;
-  totalPages = 0;
-  currentPage = 0;
-  pageSize = 10;
+  transactions:  any[] = [];
+  totalElements  = 0;
+  totalPages     = 0;
+  currentPage    = 0;
+  pageSize       = 10;
+  listLoading    = false;
+  listError      = '';
 
-  filterType = 'ALL';
+  // KYC-based stats
+  kycList:       any[] = [];
+  pendingKyc     = 0;
+  approvedKyc    = 0;
+
+  filterType   = 'ALL';
   filterStatus = 'ALL';
-  searchTerm = '';
+  searchTerm   = '';
 
   ngOnInit(): void {
-    const user = this.auth.getUser();
+    const user   = this.auth.getUser();
     this.username = user?.username ?? 'Admin';
+    this.loadKycStats();
     this.loadTransactions();
   }
 
-  loadTransactions(): void {
-    this.adminSvc.getAllTransactions(this.currentPage, this.pageSize).subscribe({
-      next: res => {
-        this.transactions = res.content;
-        this.totalElements = res.totalElements;
-        this.totalPages = res.totalPages;
+  /* ── Load KYC stats for summary row ─────────────────────────────────── */
+  loadKycStats(): void {
+    this.adminSvc.getAllKyc().subscribe({
+      next: (res: any[]) => {
+        this.kycList    = res ?? [];
+        this.pendingKyc  = this.kycList.filter(k => k.status === 'PENDING').length;
+        this.approvedKyc = this.kycList.filter(k => k.status === 'APPROVED').length;
       },
       error: () => {}
     });
   }
 
+  /* ── Load transactions via /transactions/me ──────────────────────────── */
+  loadTransactions(): void {
+    this.listLoading = true;
+    this.listError   = '';
+    this.txSvc.getMyTransactions(this.currentPage, this.pageSize).subscribe({
+      next: (res: any) => {
+        this.transactions  = res.content ?? [];
+        this.totalElements = res.totalElements ?? 0;
+        this.totalPages    = res.totalPages   ?? 1;
+        this.currentPage   = res.number       ?? res.currentPage ?? 0;
+        this.listLoading   = false;
+      },
+      error: (err: any) => {
+        const status = err?.status;
+        if (status === 404 || status === 400)
+          this.listError = 'No wallet found for admin account — transactions require an active wallet.';
+        else if (status === 0)
+          this.listError = 'Cannot reach server — is the backend running?';
+        else
+          this.listError = `Failed to load transactions (HTTP ${status ?? 'unknown'}).`;
+        this.listLoading = false;
+      }
+    });
+  }
+
   get filtered(): any[] {
     return this.transactions.filter(tx => {
-      const typeMatch = this.filterType === 'ALL' || tx.type === this.filterType;
+      const typeMatch   = this.filterType   === 'ALL' || tx.type   === this.filterType;
       const statusMatch = this.filterStatus === 'ALL' || tx.status === this.filterStatus;
-      const term = this.searchTerm.toLowerCase();
+      const term        = this.searchTerm.toLowerCase();
       const searchMatch = !term ||
-        tx.id?.toString().includes(term) ||
-        tx.walletId?.toString().includes(term);
+        tx.transactionId?.toLowerCase().includes(term) ||
+        String(tx.id ?? '').includes(term) ||
+        String(tx.walletId ?? '').includes(term) ||
+        String(tx.amount ?? '').includes(term);
       return typeMatch && statusMatch && searchMatch;
     });
   }
@@ -66,8 +104,8 @@ export class AdminTransactionsComponent implements OnInit {
       .reduce((sum, tx) => sum + (tx.amount || 0), 0);
   }
 
-  get pendingCount(): number { return this.transactions.filter(tx => tx.status === 'PENDING').length; }
-  get failedCount(): number { return this.transactions.filter(tx => tx.status === 'FAILED').length; }
+  get pendingTxCount(): number { return this.transactions.filter(tx => tx.status === 'PENDING').length;  }
+  get failedTxCount():  number { return this.transactions.filter(tx => tx.status === 'FAILED').length;   }
 
   setTypeFilter(t: string): void { this.filterType = t; }
 
@@ -82,8 +120,10 @@ export class AdminTransactionsComponent implements OnInit {
   logout(): void { this.auth.logout(); }
 
   fmtDate(d: string): string {
-    if (!d) return '-';
-    return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    if (!d) return '—';
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
+    return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
   fmtAmt(n: number, type: string): string {
@@ -96,20 +136,20 @@ export class AdminTransactionsComponent implements OnInit {
   }
 
   shortId(id: string | number): string {
-    const s = String(id);
+    const s = String(id ?? '');
     return s.length > 8 ? '…' + s.slice(-6) : s;
   }
 
-  amtClass(type: string): string { return type === 'TOPUP' ? 'amt-in' : 'amt-out'; }
+  amtClass(type: string):    string { return type === 'TOPUP' ? 'amt-in' : 'amt-out'; }
 
   statusClass(s: string): string {
     if (s === 'COMPLETED') return 'st-done';
-    if (s === 'FAILED') return 'st-fail';
+    if (s === 'FAILED')    return 'st-fail';
     return 'st-pend';
   }
 
   typeClass(t: string): string {
-    if (t === 'TOPUP') return 'type-topup';
+    if (t === 'TOPUP')    return 'type-topup';
     if (t === 'TRANSFER') return 'type-transfer';
     if (t === 'WITHDRAW') return 'type-withdraw';
     return 'type-other';

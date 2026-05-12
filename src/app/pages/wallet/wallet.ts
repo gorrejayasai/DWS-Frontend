@@ -67,7 +67,10 @@ export class WalletComponent implements OnInit {
   }
 
   fmtDate(d: string): string {
-    return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    if (!d) return '—';
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
+    return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
   get memberSince(): string {

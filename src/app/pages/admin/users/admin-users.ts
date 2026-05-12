@@ -13,72 +13,76 @@ import { AdminService } from '../../../core/services/admin.service';
   styleUrl: './admin-users.css'
 })
 export class AdminUsersComponent implements OnInit {
-  private auth = inject(AuthService);
+  private auth     = inject(AuthService);
   private adminSvc = inject(AdminService);
 
   username = '';
-  email = '';
+  email    = '';
   get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'A'; }
 
   sidebarExpanded = false;
 
-  users: any[] = [];
-  totalElements = 0;
-  totalPages = 0;
-  currentPage = 0;
-  pageSize = 10;
-
-  filterStatus = 'ALL';
-  searchTerm = '';
+  kycList: any[]  = [];
+  listLoading     = false;
+  listError       = '';
+  filterStatus    = 'ALL';
+  searchTerm      = '';
 
   ngOnInit(): void {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'Admin';
-    this.email = user?.email ?? '';
+    this.email    = user?.email ?? '';
     this.loadUsers();
   }
 
   loadUsers(): void {
-    this.adminSvc.getAllUsers(this.currentPage, this.pageSize).subscribe({
-      next: res => {
-        this.users = res.content;
-        this.totalElements = res.totalElements;
-        this.totalPages = res.totalPages;
+    this.listLoading = true;
+    this.listError   = '';
+    this.adminSvc.getAllKyc().subscribe({
+      next: (res: any[]) => {
+        this.kycList    = res ?? [];
+        this.listLoading = false;
       },
-      error: () => {}
+      error: (err: any) => {
+        const status = err?.status;
+        if      (status === 403) this.listError = 'Access denied — admin role required (HTTP 403).';
+        else if (status === 0)   this.listError = 'Cannot reach server — is the backend running?';
+        else                     this.listError = `Failed to load data (HTTP ${status ?? 'unknown'}).`;
+        this.listLoading = false;
+      }
     });
   }
 
   get filteredUsers(): any[] {
-    return this.users.filter(u => {
-      const statusMatch = this.filterStatus === 'ALL' || u.status === this.filterStatus;
-      const term = this.searchTerm.toLowerCase();
-      const searchMatch = !term ||
-        u.username?.toLowerCase().includes(term) ||
-        u.email?.toLowerCase().includes(term);
+    return this.kycList.filter(k => {
+      const statusMatch = this.filterStatus === 'ALL' || k.status === this.filterStatus;
+      const term        = this.searchTerm.toLowerCase();
+      const searchMatch = !term || String(k.userId).includes(term);
       return statusMatch && searchMatch;
     });
   }
 
-  get totalUsers(): number { return this.users.length; }
-  get activeUsers(): number { return this.users.filter(u => u.status === 'ACTIVE').length; }
+  get totalKycUsers():  number { return this.kycList.length; }
+  get pendingCount():   number { return this.kycList.filter(k => k.status === 'PENDING').length;  }
+  get approvedCount():  number { return this.kycList.filter(k => k.status === 'APPROVED').length; }
+  get rejectedCount():  number { return this.kycList.filter(k => k.status === 'REJECTED').length; }
 
   setFilter(f: string): void { this.filterStatus = f; }
-
-  prevPage(): void {
-    if (this.currentPage > 0) { this.currentPage--; this.loadUsers(); }
-  }
-  nextPage(): void {
-    if (this.currentPage < this.totalPages - 1) { this.currentPage++; this.loadUsers(); }
-  }
 
   toggleSidebar(): void { this.sidebarExpanded = !this.sidebarExpanded; }
   logout(): void { this.auth.logout(); }
 
   fmtDate(d: string): string {
-    if (!d) return '-';
-    return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    if (!d) return '—';
+    const dt = new Date(d);
+    if (isNaN(dt.getTime())) return '—';
+    return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
-  userInitials(name: string): string { return (name || '?').slice(0, 2).toUpperCase(); }
+  kycStatusClass(s: string): string {
+    if (s === 'APPROVED') return 'st-approved';
+    if (s === 'REJECTED')  return 'st-rejected';
+    if (s === 'PENDING')   return 'st-pending';
+    return 'st-other';
+  }
 }

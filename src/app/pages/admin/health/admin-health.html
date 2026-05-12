@@ -57,39 +57,56 @@
       </div>
       <div>
         <div class="topbar-title">System Health</div>
-        <div class="topbar-sub">Monitor microservice status</div>
+        <div class="topbar-sub">Live microservice status — auto-refreshes every {{ autoRefreshSecs }}s</div>
       </div>
       <div class="topbar-right">
+        <div class="countdown-pill">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 3.5V6.5L8.5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          {{ countdown }}s
+        </div>
+        <button class="btn-check" (click)="checkAll()" [disabled]="checking">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 11-1-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 2v3H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {{ checking ? 'Checking…' : 'Check Now' }}
+        </button>
         <span class="admin-badge">ADMIN</span>
         <div class="topbar-av">{{ initials }}</div>
       </div>
     </div>
 
     <div class="content">
+
       <!-- STATUS BANNER -->
-      @if (allUp) {
+      @if (overallStatus === 'checking') {
+        <div class="banner banner-checking">
+          <div class="pulse-ring"></div>
+          <div>
+            <div class="banner-title">Checking Services…</div>
+            <div class="banner-sub">Pinging all microservices through the API Gateway</div>
+          </div>
+        </div>
+      } @else if (overallStatus === 'ok') {
         <div class="banner banner-ok">
           <svg viewBox="0 0 20 20"><path d="M4 10l4 4 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <div>
             <div class="banner-title">All Systems Operational</div>
-            <div class="banner-sub">All {{ services.length }} services are running normally</div>
+            <div class="banner-sub">{{ upCount }} / {{ checkableServices.length }} checkable services responded — last checked {{ fmtTime(lastFullCheck) }}</div>
           </div>
         </div>
       } @else {
         <div class="banner banner-warn">
           <svg viewBox="0 0 20 20"><path d="M10 6v5M10 14h.01" stroke-width="2" stroke-linecap="round"/><path d="M2 17L10 3l8 14H2Z" stroke-width="1.8" stroke-linejoin="round"/></svg>
           <div>
-            <div class="banner-title">System Degraded</div>
-            <div class="banner-sub">{{ downCount }} service(s) are experiencing issues</div>
+            <div class="banner-title">{{ downCount }} Service(s) Unreachable</div>
+            <div class="banner-sub">{{ upCount }} of {{ checkableServices.length }} services are responding — last checked {{ fmtTime(lastFullCheck) }}</div>
           </div>
         </div>
       }
 
-      <!-- SUMMARY ROW -->
+      <!-- SUMMARY PILLS -->
       <div class="summary-row">
         <div class="sum-pill sum-up">
           <span class="dot dot-up"></span>
-          {{ upCount }} / {{ services.length }} Services Up
+          {{ upCount }} Up
         </div>
         @if (downCount > 0) {
           <div class="sum-pill sum-down">
@@ -97,33 +114,76 @@
             {{ downCount }} Down
           </div>
         }
+        <div class="sum-pill sum-internal">
+          <span class="dot dot-internal"></span>
+          2 Internal (not polled)
+        </div>
       </div>
 
       <!-- SERVICE GRID -->
       <div class="service-grid">
         @for (svc of services; track svc.name) {
-          <div class="svc-card" [class.svc-down]="svc.status !== 'UP'">
+          <div class="svc-card" [class.svc-down]="svc.status === 'DOWN'" [class.svc-internal]="svc.status === 'INTERNAL'">
             <div class="svc-header">
               <div class="svc-name">{{ svc.name }}</div>
-              @if (svc.status === 'UP') {
+              @if (svc.status === 'CHECKING') {
+                <span class="svc-badge badge-checking">
+                  <span class="mini-spinner"></span> Checking
+                </span>
+              } @else if (svc.status === 'UP') {
                 <span class="svc-badge badge-up">UP</span>
-              } @else {
+              } @else if (svc.status === 'DOWN') {
                 <span class="svc-badge badge-down">DOWN</span>
-              }
-            </div>
-            <div class="svc-port">Port {{ svc.port }}</div>
-            <div class="svc-status-row">
-              @if (svc.status === 'UP') {
-                <span class="status-dot dot-up"></span>
-                <span class="status-text text-up">Operational</span>
               } @else {
-                <span class="status-dot dot-down"></span>
-                <span class="status-text text-down">Unavailable</span>
+                <span class="svc-badge badge-internal">INTERNAL</span>
               }
             </div>
+
+            <div class="svc-port">Port {{ svc.port }}</div>
+            <div class="svc-desc">{{ svc.description }}</div>
+
+            <div class="svc-footer">
+              @if (svc.status === 'UP') {
+                <div class="svc-latency-row">
+                  <span class="status-dot dot-up"></span>
+                  <span class="status-text text-up">Operational</span>
+                  <span class="latency-badge" [class]="latencyClass(svc.latency)">{{ latencyLabel(svc.latency) }}</span>
+                </div>
+              } @else if (svc.status === 'DOWN') {
+                <div class="svc-latency-row">
+                  <span class="status-dot dot-down"></span>
+                  <span class="status-text text-down">Unreachable</span>
+                </div>
+              } @else if (svc.status === 'CHECKING') {
+                <div class="svc-latency-row">
+                  <span class="status-dot dot-checking"></span>
+                  <span class="status-text text-checking">Pinging…</span>
+                </div>
+              } @else {
+                <div class="svc-latency-row">
+                  <span class="status-dot dot-internal"></span>
+                  <span class="status-text text-internal">Not polled via gateway</span>
+                </div>
+              }
+            </div>
+
+            @if (svc.lastChecked) {
+              <div class="last-checked">Checked {{ fmtTime(svc.lastChecked) }}</div>
+            }
           </div>
         }
       </div>
+
+      <!-- LEGEND -->
+      <div class="legend-card">
+        <div class="legend-title">How health checks work</div>
+        <div class="legend-items">
+          <div class="legend-item"><span class="dot dot-up"></span><span>UP — service returned any HTTP response (200, 401, 403 etc.) within 6 s</span></div>
+          <div class="legend-item"><span class="dot dot-down"></span><span>DOWN — network error, connection refused, or timeout after 6 s</span></div>
+          <div class="legend-item"><span class="dot dot-internal"></span><span>INTERNAL — not reachable through API Gateway (Eureka, Notification)</span></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

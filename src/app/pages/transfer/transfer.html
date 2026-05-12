@@ -40,8 +40,13 @@
           <div class="form-group">
             <label class="form-label">Recipient Wallet ID</label>
             <input type="number" class="form-input" [(ngModel)]="targetWalletId" (ngModelChange)="errorMsg=''"
-              placeholder="Enter wallet ID (e.g. 42)" min="1" />
-            <div class="field-hint">Ask the recipient for their PayVault Wallet ID</div>
+              placeholder="Enter wallet ID (e.g. 42)" min="1"
+              [class.input-err]="selfTransfer" />
+            @if (selfTransfer) {
+              <div class="amt-hint err">Cannot transfer to your own wallet</div>
+            } @else {
+              <div class="field-hint">Ask the recipient for their PayVault Wallet ID</div>
+            }
           </div>
 
           <!-- Amount -->

@@ -20,6 +20,7 @@ export class TransferComponent implements OnInit {
   email = '';
   get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'U'; }
 
+  walletId: number | null = null;
   balance = 0;
   walletLoaded = false;
 
@@ -40,60 +41,67 @@ export class TransferComponent implements OnInit {
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
     this.walletSvc.getMyWallet().subscribe({
-      next: w => { this.balance = w.availableBalance; this.walletLoaded = true; },
+      next: w => {
+        this.walletId = w.id;
+        this.balance = w.availableBalance;
+        this.walletLoaded = true;
+      },
       error: () => { this.walletLoaded = true; }
     });
   }
 
-  selectQuick(amt: number): void {
-    this.amount = amt;
-    this.selectedQuick = amt;
-    this.errorMsg = '';
-  }
-
+  selectQuick(amt: number): void { this.amount = amt; this.selectedQuick = amt; this.errorMsg = ''; }
   onAmountChange(): void { this.selectedQuick = null; this.errorMsg = ''; }
+
+  get selfTransfer(): boolean {
+    return !!this.walletId && !!this.targetWalletId && this.targetWalletId === this.walletId;
+  }
 
   get amtHint(): { text: string; cls: string } {
     const v = this.amountNum;
     if (!v) return { text: '', cls: '' };
-    if (v < 1) return { text: 'Minimum transfer is ₹1', cls: 'err' };
+    if (v < 1)      return { text: 'Minimum transfer is ₹1', cls: 'err' };
     if (v > 100000) return { text: 'Maximum transfer is ₹1,00,000 per transaction', cls: 'err' };
     if (v > this.balance) return { text: 'Insufficient balance', cls: 'err' };
     return { text: `₹${v.toLocaleString('en-IN')} will be transferred`, cls: 'ok' };
   }
 
+  get targetHint(): string {
+    if (this.selfTransfer) return 'Cannot transfer to your own wallet';
+    return '';
+  }
+
   get canSubmit(): boolean {
-    return !!this.targetWalletId && !!this.amount &&
-      this.amountNum >= 1 && this.amountNum <= 100000 &&
+    return !!this.walletId && !!this.targetWalletId && !this.selfTransfer &&
+      !!this.amount && this.amountNum >= 1 && this.amountNum <= 100000 &&
       this.amountNum <= this.balance && !this.loading;
   }
 
   onSubmit(): void {
-    if (!this.canSubmit) return;
-    if (!this.targetWalletId) { this.errorMsg = 'Please enter a wallet ID.'; return; }
+    if (!this.canSubmit || !this.walletId || !this.targetWalletId) return;
     this.loading = true;
     this.errorMsg = '';
-    const key = crypto.randomUUID();
-    this.walletSvc.transfer({
-      targetWalletId: this.targetWalletId!,
+
+    this.walletSvc.transfer(this.walletId, {
+      targetWalletId: this.targetWalletId,
       amount: this.amountNum,
-      currency: 'INR',
-      idempotencyKey: key
+      currency: 'INR'
     }).subscribe({
       next: (res: any) => {
         this.loading = false;
-        this.successTxId = res?.transactionId ?? key;
+        this.successTxId = res?.transactionId ?? '';
         this.showSuccess = true;
-        this.balance -= this.amountNum;
+        // Reload balance from server to get accurate post-transfer balance
+        this.walletSvc.getMyWallet().subscribe({ next: w => this.balance = w.availableBalance, error: () => {} });
       },
       error: (err) => {
         this.loading = false;
         const body = err.error;
-        if (typeof body === 'string') this.errorMsg = body;
-        else if (body?.message) this.errorMsg = body.message;
-        else if (err.status === 400) this.errorMsg = 'Invalid request or insufficient balance.';
-        else if (err.status === 404) this.errorMsg = 'Target wallet not found.';
-        else this.errorMsg = 'Transfer failed. Please try again.';
+        if (body?.message)            this.errorMsg = body.message;
+        else if (typeof body === 'string') this.errorMsg = body;
+        else if (err.status === 400)  this.errorMsg = 'Invalid request or insufficient balance.';
+        else if (err.status === 404)  this.errorMsg = 'Target wallet not found.';
+        else                          this.errorMsg = 'Transfer failed. Please try again.';
       }
     });
   }

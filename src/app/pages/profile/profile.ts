@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { KycService } from '../../core/services/kyc.service';
 import { UserProfile } from '../../core/models/user.model';
 
 @Component({
@@ -14,9 +15,11 @@ import { UserProfile } from '../../core/models/user.model';
 })
 export class ProfileComponent implements OnInit {
   private auth = inject(AuthService);
+  private kycSvc = inject(KycService);
   private router = inject(Router);
 
   profile: UserProfile | null = null;
+  kycStatus: 'PENDING' | 'APPROVED' | 'REJECTED' | 'NOT_SUBMITTED' = 'NOT_SUBMITTED';
   loading = true;
   saving = false;
   saveSuccess = false;
@@ -40,6 +43,8 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const user = this.auth.getStoredUser();
+
     this.auth.getProfile().subscribe({
       next: (p) => {
         this.profile = p;
@@ -48,16 +53,22 @@ export class ProfileComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        // Use stored user as fallback
-        const stored = this.auth.getStoredUser();
-        if (stored) {
-          this.profile = { id: 0, username: stored.username, email: stored.email, role: stored.role, status: 'ACTIVE', createdAt: '' };
-          this.editUsername = stored.username;
-          this.editEmail = stored.email;
+        if (user) {
+          this.profile = { id: 0, username: user.username, email: user.email, role: user.role, status: 'ACTIVE', createdAt: '' };
+          this.editUsername = user.username;
+          this.editEmail = user.email;
         }
         this.loading = false;
       }
     });
+
+    // Load real KYC status
+    if (user?.userId) {
+      this.kycSvc.getKycByUserId(user.userId).subscribe({
+        next: kyc => { this.kycStatus = kyc.status; },
+        error: ()  => { this.kycStatus = 'NOT_SUBMITTED'; }
+      });
+    }
   }
 
   switchTab(tab: 'personal' | 'security'): void {

@@ -57,7 +57,7 @@
       </div>
       <div>
         <div class="topbar-title">User Management</div>
-        <div class="topbar-sub">Manage all registered users</div>
+        <div class="topbar-sub">Users who have submitted KYC</div>
       </div>
       <div class="topbar-right">
         <span class="admin-badge">ADMIN</span>
@@ -73,80 +73,92 @@
             <svg viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/></svg>
           </div>
           <div class="mini-info">
-            <div class="mini-label">Total Users</div>
-            <div class="mini-val">{{ totalElements }}</div>
+            <div class="mini-label">Total KYC Users</div>
+            <div class="mini-val">{{ totalKycUsers }}</div>
+          </div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-icon mi-yellow">
+            <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" stroke-width="1.6"/><path d="M9 5v4l2.5 2.5" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <div class="mini-info">
+            <div class="mini-label">Pending Review</div>
+            <div class="mini-val">{{ pendingCount }}</div>
           </div>
         </div>
         <div class="mini-card">
           <div class="mini-icon mi-green">
-            <svg viewBox="0 0 18 18"><circle cx="9" cy="6" r="3.5" stroke-width="1.6"/><path d="M2 16c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke-width="1.6" stroke-linecap="round"/><path d="M12 10l2 2 3-3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 18 18"><path d="M3 9l4 4 8-8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <div class="mini-info">
-            <div class="mini-label">Active Users</div>
-            <div class="mini-val">{{ activeUsers }}</div>
+            <div class="mini-label">Approved</div>
+            <div class="mini-val">{{ approvedCount }}</div>
           </div>
         </div>
         <div class="mini-card">
-          <div class="mini-icon mi-blue">
-            <svg viewBox="0 0 18 18"><rect x="2" y="2" width="14" height="14" rx="3" stroke-width="1.6"/><path d="M5 9h8M5 6h8M5 12h5" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <div class="mini-icon mi-red">
+            <svg viewBox="0 0 18 18"><path d="M5 5l8 8M13 5l-8 8" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
           <div class="mini-info">
-            <div class="mini-label">Page {{ currentPage + 1 }} / {{ totalPages || 1 }}</div>
-            <div class="mini-val">{{ pageSize }} per page</div>
+            <div class="mini-label">Rejected</div>
+            <div class="mini-val">{{ rejectedCount }}</div>
           </div>
         </div>
       </div>
 
-      <!-- FILTER BAR -->
+      <!-- ERROR -->
+      @if (listError) {
+        <div class="alert-error">{{ listError }}</div>
+      }
+
+      <!-- REFRESH + FILTER -->
       <div class="filter-bar">
         <div class="chips">
           <button class="chip" [class.chip-active]="filterStatus==='ALL'" (click)="setFilter('ALL')">All</button>
-          <button class="chip" [class.chip-active]="filterStatus==='ACTIVE'" (click)="setFilter('ACTIVE')">Active</button>
-          <button class="chip" [class.chip-active]="filterStatus==='DELETED'" (click)="setFilter('DELETED')">Deleted</button>
+          <button class="chip chip-yellow" [class.chip-active]="filterStatus==='PENDING'" (click)="setFilter('PENDING')">Pending</button>
+          <button class="chip chip-green" [class.chip-active]="filterStatus==='APPROVED'" (click)="setFilter('APPROVED')">Approved</button>
+          <button class="chip chip-red" [class.chip-active]="filterStatus==='REJECTED'" (click)="setFilter('REJECTED')">Rejected</button>
         </div>
-        <div class="search-wrap">
-          <svg class="search-icon" viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5" stroke-width="1.6"/><path d="M10 10l3.5 3.5" stroke-width="1.6" stroke-linecap="round"/></svg>
-          <input class="search-input" type="text" placeholder="Search username or email…" [(ngModel)]="searchTerm" />
+        <div class="right-actions">
+          <button class="btn-refresh" (click)="loadUsers()" [disabled]="listLoading">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M13 7.5a5.5 5.5 0 11-1.1-3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M13 2v3h-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ listLoading ? 'Refreshing…' : 'Refresh' }}
+          </button>
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5" stroke-width="1.6"/><path d="M10 10l3.5 3.5" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <input class="search-input" type="text" placeholder="Search by User ID…" [(ngModel)]="searchTerm" />
+          </div>
         </div>
       </div>
 
       <!-- TABLE -->
       <div class="card">
         <div class="table-wrap">
-          @if (filteredUsers.length === 0) {
+          @if (listLoading) {
+            <div class="empty-row">Loading users…</div>
+          } @else if (filteredUsers.length === 0) {
             <div class="empty-row">No users found</div>
           } @else {
             <table>
               <thead>
                 <tr>
-                  <th>User</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Joined</th>
+                  <th>User ID</th>
+                  <th>KYC Status</th>
+                  <th>Documents</th>
+                  <th>Submitted</th>
+                  <th>Reviewed</th>
                 </tr>
               </thead>
               <tbody>
-                @for (u of filteredUsers; track u.id) {
+                @for (k of filteredUsers; track k.id) {
                   <tr>
+                    <td class="uid-cell">#{{ k.userId }}</td>
                     <td>
-                      <div class="user-cell">
-                        <div class="u-av">{{ userInitials(u.username) }}</div>
-                        <span class="u-name">{{ u.username }}</span>
-                      </div>
+                      <span class="badge" [class]="kycStatusClass(k.status)">{{ k.status }}</span>
                     </td>
-                    <td class="text-muted">{{ u.email }}</td>
-                    <td><span class="role-badge">{{ u.role }}</span></td>
-                    <td>
-                      @if (u.status === 'ACTIVE') {
-                        <span class="badge st-active">ACTIVE</span>
-                      } @else if (u.status === 'DELETED') {
-                        <span class="badge st-deleted">DELETED</span>
-                      } @else {
-                        <span class="badge st-other">{{ u.status }}</span>
-                      }
-                    </td>
-                    <td class="text-muted">{{ fmtDate(u.createdAt) }}</td>
+                    <td class="text-muted">{{ k.documents?.length ?? 0 }} doc(s)</td>
+                    <td class="text-muted">{{ fmtDate(k.submittedAt) }}</td>
+                    <td class="text-muted">{{ fmtDate(k.reviewedAt) }}</td>
                   </tr>
                 }
               </tbody>
@@ -155,17 +167,9 @@
         </div>
       </div>
 
-      <!-- PAGINATION -->
+      <!-- COUNT -->
       <div class="pagination">
-        <button class="pg-btn" [disabled]="currentPage === 0" (click)="prevPage()">
-          <svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Prev
-        </button>
-        <span class="pg-info">Page {{ currentPage + 1 }} of {{ totalPages || 1 }}</span>
-        <button class="pg-btn" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">
-          Next
-          <svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        <span class="pg-info">Showing {{ filteredUsers.length }} of {{ totalKycUsers }} users</span>
       </div>
     </div>
   </div>

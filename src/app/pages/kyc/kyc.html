@@ -76,17 +76,46 @@
           <div class="error-box">{{ errorMsg }}</div>
         }
 
-        <!-- FORM (show when no KYC, pending, or rejected) -->
-        @if (!kyc || kyc.status === 'REJECTED' || kyc.status === 'PENDING') {
+        <!-- PENDING LOCK NOTICE — no changes while under review -->
+        @if (kyc?.status === 'PENDING') {
+          <div class="locked-notice">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="5" y="9" width="10" height="8" rx="2" stroke="#F59E0B" stroke-width="1.6"/><path d="M7 9V7a3 3 0 016 0v2" stroke="#F59E0B" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <div>
+              <div class="locked-title">Changes Locked</div>
+              <div class="locked-sub">Your KYC is under review. You cannot make changes until an admin accepts or rejects your submission.</div>
+            </div>
+          </div>
+        }
+
+        <!-- FORM (show only when no KYC yet, or REJECTED — NOT when PENDING) -->
+        @if (!kyc || kyc.status === 'REJECTED') {
           <div class="form-card">
             <div class="card-head">
-              <div class="card-head-icon">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="#6C63FF" stroke-width="1.6" stroke-linejoin="round"/></svg>
-              </div>
-              <div>
-                <h3>Identity Verification</h3>
-                <p>Submit one government-issued ID — Aadhaar or PAN</p>
-              </div>
+              @if (kyc?.status === 'REJECTED') {
+                <div class="card-head-icon" style="background:rgba(239,68,68,.08)">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#EF4444" stroke-width="1.6"/><path d="M8 8l6 6M14 8l-6 6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <h3>Resubmit Your Documents</h3>
+                  <p>Correct the issue and resubmit your KYC document</p>
+                </div>
+              } @else if (kyc?.status === 'PENDING') {
+                <div class="card-head-icon" style="background:rgba(245,158,11,.1)">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#F59E0B" stroke-width="1.6"/><path d="M11 8V11M11 14V14.01" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <h3>Update Your Documents</h3>
+                  <p>You can update your document while it's under review</p>
+                </div>
+              } @else {
+                <div class="card-head-icon">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="#6C63FF" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                </div>
+                <div>
+                  <h3>Identity Verification</h3>
+                  <p>Submit one government-issued ID — Aadhaar or PAN</p>
+                </div>
+              }
             </div>
 
             <!-- ID TYPE TOGGLE -->
@@ -127,10 +156,13 @@
               <div class="di-row"><span class="di-label">Review time</span><span class="di-val">1–2 business days</span></div>
             </div>
 
-            <button class="btn-full" [disabled]="!canSubmit" (click)="onSubmit()">
+            <button class="btn-full" [disabled]="!canSubmit" (click)="onSubmit()"
+              [style.background]="kyc?.status === 'REJECTED' ? 'linear-gradient(135deg,#EF4444,#DC2626)' : ''">
               @if (loading) {
                 <div class="btn-spinner"></div> Submitting…
-              } @else if (kyc?.status === 'REJECTED' || kyc?.status === 'PENDING') {
+              } @else if (kyc?.status === 'REJECTED') {
+                Resubmit KYC
+              } @else if (kyc?.status === 'PENDING') {
                 Update Document
               } @else {
                 Submit KYC

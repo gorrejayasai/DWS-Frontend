@@ -94,12 +94,27 @@
             </div>
             <div class="profile-name">{{ profile?.username }}</div>
             <div class="profile-email">{{ profile?.email }}</div>
-            <div class="profile-badge" [class.badge-active]="profile?.status === 'ACTIVE'" [class.badge-pending]="profile?.status !== 'ACTIVE'">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
-              </svg>
-              KYC Pending
-            </div>
+            @if (kycStatus === 'APPROVED') {
+              <div class="profile-badge badge-active">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                KYC Verified
+              </div>
+            } @else if (kycStatus === 'REJECTED') {
+              <div class="profile-badge badge-rejected">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                KYC Rejected
+              </div>
+            } @else if (kycStatus === 'PENDING') {
+              <div class="profile-badge badge-pending">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 4v2.5l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                KYC Under Review
+              </div>
+            } @else {
+              <div class="profile-badge badge-pending">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/></svg>
+                KYC Not Submitted
+              </div>
+            }
             <div class="profile-stats">
               <div class="ps"><div class="ps-val">—</div><div class="ps-lbl">Transactions</div></div>
               <div class="ps"><div class="ps-val">—</div><div class="ps-lbl">Balance</div></div>

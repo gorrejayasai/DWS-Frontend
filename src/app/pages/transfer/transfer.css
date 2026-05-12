@@ -33,6 +33,8 @@ a{text-decoration:none;color:inherit}
 .form-label{font-size:.8rem;font-weight:700;color:#5C5480;margin-bottom:8px;display:block;letter-spacing:.03em}
 .form-input{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(108,99,255,.12);background:#fff;font-family:inherit;font-size:.9375rem;color:#1A1340;outline:none;transition:border-color .2s,box-shadow .2s}
 .form-input:focus{border-color:#6C63FF;box-shadow:0 0 0 4px rgba(108,99,255,.1)}
+.form-input.input-err{border-color:#EF4444}
+.form-input.input-err:focus{border-color:#EF4444;box-shadow:0 0 0 4px rgba(239,68,68,.1)}
 .field-hint{font-size:.75rem;color:#9C94C0;margin-top:6px}
 .amount-wrap{position:relative}
 .amount-prefix{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.25rem;font-weight:700;color:#5C5480}
