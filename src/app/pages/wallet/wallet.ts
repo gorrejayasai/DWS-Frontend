@@ -5,13 +5,14 @@ import { AuthService } from '../../core/services/auth.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { WalletResponse } from '../../core/models/wallet.model';
+import { TransactionSummaryResponse } from '../../core/models/transaction.model';
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './wallet.html',
-  styleUrl: './wallet.css'
+  styleUrl: './wallet.css',
 })
 export class WalletComponent implements OnInit {
   private auth = inject(AuthService);
@@ -20,47 +21,71 @@ export class WalletComponent implements OnInit {
 
   username = '';
   email = '';
-  get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'U'; }
+  get initials(): string {
+    return this.username.slice(0, 2).toUpperCase() || 'U';
+  }
 
   wallet: WalletResponse | null = null;
   walletLoading = true;
   walletError = '';
 
-  totalIn = 0;
-  totalOut = 0;
-  txCount = 0;
+  summary: TransactionSummaryResponse | null = null;
+  summaryLoading = true;
+
+  get totalIn(): number {
+    if (!this.summary) return 0;
+    return (
+      (this.summary.topup?.totalAmount ?? 0) + (this.summary.transfersReceived?.totalAmount ?? 0)
+    );
+  }
+
+  get totalOut(): number {
+    if (!this.summary) return 0;
+    return (
+      (this.summary.withdraw?.totalAmount ?? 0) + (this.summary.transfersSent?.totalAmount ?? 0)
+    );
+  }
+
+  get txCount(): number {
+    return this.summary?.overall?.totalTransactions ?? 0;
+  }
 
   ngOnInit(): void {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
     this.loadWallet();
-    this.loadStats();
+    this.loadSummary();
   }
 
   loadWallet(): void {
     this.walletSvc.getMyWallet().subscribe({
-      next: w => { this.wallet = w; this.walletLoading = false; },
-      error: () => { this.walletLoading = false; this.walletError = 'Could not load wallet.'; }
-    });
-  }
-
-  loadStats(): void {
-    this.txSvc.getMyTransactions(0, 100).subscribe({
-      next: res => {
-        this.txCount = res.totalElements;
-        this.totalIn = res.content
-          .filter(t => t.type === 'TOPUP' && t.status === 'COMPLETED')
-          .reduce((s, t) => s + t.amount, 0);
-        this.totalOut = res.content
-          .filter(t => (t.type === 'TRANSFER' || t.type === 'WITHDRAW') && t.status === 'COMPLETED')
-          .reduce((s, t) => s + t.amount, 0);
+      next: (w) => {
+        this.wallet = w;
+        this.walletLoading = false;
       },
-      error: () => {}
+      error: () => {
+        this.walletLoading = false;
+        this.walletError = 'Could not load wallet.';
+      },
     });
   }
 
-  logout(): void { this.auth.logout(); }
+  loadSummary(): void {
+    this.txSvc.getTransactionSummary().subscribe({
+      next: (s) => {
+        this.summary = s;
+        this.summaryLoading = false;
+      },
+      error: () => {
+        this.summaryLoading = false;
+      },
+    });
+  }
+
+  logout(): void {
+    this.auth.logout();
+  }
 
   fmt(n: number): string {
     return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

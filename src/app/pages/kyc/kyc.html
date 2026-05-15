@@ -1,69 +1,243 @@
 <div class="layout">
   <aside class="sidebar">
-    <div class="sb-brand"><div class="sb-logo"><svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="11" r="3" fill="white"/></svg></div><span class="sb-name">PayVault</span></div>
+    <div class="sb-brand">
+      <div class="sb-logo">
+        <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+          <path
+            d="M4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+          />
+          <circle cx="11" cy="11" r="3" fill="white" />
+        </svg>
+      </div>
+      <span class="sb-name">PayVault</span>
+    </div>
     <nav class="sb-nav">
       <div class="sb-section">Main</div>
-      <a routerLink="/dashboard" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="1" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="1" y="10" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="10" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6"/></svg>Dashboard</a>
-      <a routerLink="/wallet" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M1 8h16M12 12h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>My Wallet</a>
-      <a routerLink="/transactions" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M3 9h8M3 13h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Transactions</a>
+      <a routerLink="/dashboard" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect x="1" y="1" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6" />
+          <rect x="10" y="1" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6" />
+          <rect x="1" y="10" width="7" height="7" rx="2" stroke="currentColor" stroke-width="1.6" />
+          <rect
+            x="10"
+            y="10"
+            width="7"
+            height="7"
+            rx="2"
+            stroke="currentColor"
+            stroke-width="1.6"
+          /></svg
+        >Dashboard</a
+      >
+      <a routerLink="/wallet" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <rect
+            x="1"
+            y="4"
+            width="16"
+            height="12"
+            rx="2.5"
+            stroke="currentColor"
+            stroke-width="1.6"
+          />
+          <path
+            d="M1 8h16M12 12h2"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          /></svg
+        >My Wallet</a
+      >
+      <a routerLink="/transactions" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M3 5h12M3 9h8M3 13h5"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          /></svg
+        >Transactions</a
+      >
       <div class="sb-section">Actions</div>
-      <a routerLink="/topup" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Top Up</a>
-      <a routerLink="/transfer" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Transfer</a>
-      <a routerLink="/withdraw" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 15h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Withdraw</a>
+      <a routerLink="/topup" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M9 3v12M3 9h12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg
+        >Top Up</a
+      >
+      <a routerLink="/transfer" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M3 9h12M11 5l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg
+        >Transfer</a
+      >
+      <a routerLink="/withdraw" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M9 3v12M3 15h12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg
+        >Withdraw</a
+      >
       <div class="sb-section">Account</div>
-      <a routerLink="/kyc" class="sb-link active"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L16 4V8C16 12.4 12.9 16.3 9 18C5.1 16.3 2 12.4 2 8V4L9 1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>KYC Verification</a>
-      <a routerLink="/notifications" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a5 5 0 00-5 5v3l-2 2v1h14v-1l-2-2V7a5 5 0 00-5-5zM7 15a2 2 0 004 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Notifications</a>
-      <a routerLink="/profile" class="sb-link"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M1 17c0-4 3.58-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Profile</a>
+      <a routerLink="/kyc" class="sb-link active"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M9 1L16 4V8C16 12.4 12.9 16.3 9 18C5.1 16.3 2 12.4 2 8V4L9 1Z"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+          /></svg
+        >KYC Verification</a
+      >
+      <a routerLink="/notifications" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path
+            d="M9 2a5 5 0 00-5 5v3l-2 2v1h14v-1l-2-2V7a5 5 0 00-5-5zM7 15a2 2 0 004 0"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          /></svg
+        >Notifications</a
+      >
+      <a routerLink="/profile" class="sb-link"
+        ><svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="6" r="4" stroke="currentColor" stroke-width="1.6" />
+          <path
+            d="M1 17c0-4 3.58-7 8-7s8 3 8 7"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          /></svg
+        >Profile</a
+      >
     </nav>
-    <div class="sb-user"><div class="sb-av">{{ initials }}</div><div><div class="sb-uname">{{ username }}</div><div class="sb-uemail">{{ email }}</div></div></div>
+    <div class="sb-user">
+      <div class="sb-av">{{ initials }}</div>
+      <div>
+        <div class="sb-uname">{{ username }}</div>
+        <div class="sb-uemail">{{ email }}</div>
+      </div>
+    </div>
   </aside>
 
   <div class="main">
-    <div class="topbar"><div><h1>KYC Verification</h1><p>Verify your identity to unlock full features</p></div><div class="topbar-av">{{ initials }}</div></div>
+    <div class="topbar">
+      <div>
+        <h1>KYC Verification</h1>
+        <p>Verify your identity to unlock full features</p>
+      </div>
+      <div class="topbar-av">{{ initials }}</div>
+    </div>
 
     <div class="content">
       @if (kycLoading) {
-        <div class="loading-state"><div class="spinner-lg"></div><p>Loading KYC status…</p></div>
+        <div class="loading-state">
+          <div class="spinner-lg"></div>
+          <p>Loading KYC status…</p>
+        </div>
       } @else {
         <!-- STATUS BANNER -->
         @if (kyc?.status === 'APPROVED') {
           <div class="status-banner sb-approved">
-            <div class="sban-icon" style="background:rgba(16,185,129,.1)">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="#10B981" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 11l2.5 2.5 4.5-5" stroke="#10B981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="sban-icon" style="background: rgba(16, 185, 129, 0.1)">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path
+                  d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z"
+                  stroke="#10B981"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7.5 11l2.5 2.5 4.5-5"
+                  stroke="#10B981"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </div>
             <div>
-              <div class="sban-title" style="color:#059669">KYC Verified ✓</div>
-              <div class="sban-desc" style="color:#10B981">Your identity has been verified. All features are unlocked.</div>
+              <div class="sban-title" style="color: #059669">KYC Verified ✓</div>
+              <div class="sban-desc" style="color: #10b981">
+                Your identity has been verified. All features are unlocked.
+              </div>
             </div>
           </div>
         } @else if (kyc?.status === 'PENDING') {
           <div class="status-banner sb-pending">
-            <div class="sban-icon" style="background:rgba(245,158,11,.1)">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#F59E0B" stroke-width="1.6"/><path d="M11 8V11M11 14V14.01" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <div class="sban-icon" style="background: rgba(245, 158, 11, 0.1)">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="11" r="8" stroke="#F59E0B" stroke-width="1.6" />
+                <path
+                  d="M11 8V11M11 14V14.01"
+                  stroke="#F59E0B"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
             </div>
             <div>
-              <div class="sban-title" style="color:#B45309">Under Review</div>
-              <div class="sban-desc" style="color:#F59E0B">Your documents are being reviewed. This usually takes 1-2 business days.</div>
+              <div class="sban-title" style="color: #b45309">Under Review</div>
+              <div class="sban-desc" style="color: #f59e0b">
+                Your documents are being reviewed. This usually takes 1-2 business days.
+              </div>
             </div>
           </div>
         } @else if (kyc?.status === 'REJECTED') {
           <div class="status-banner sb-rejected">
-            <div class="sban-icon" style="background:rgba(239,68,68,.08)">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#EF4444" stroke-width="1.6"/><path d="M8 8l6 6M14 8l-6 6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <div class="sban-icon" style="background: rgba(239, 68, 68, 0.08)">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <circle cx="11" cy="11" r="8" stroke="#EF4444" stroke-width="1.6" />
+                <path
+                  d="M8 8l6 6M14 8l-6 6"
+                  stroke="#EF4444"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
             </div>
             <div>
-              <div class="sban-title" style="color:#DC2626">KYC Rejected</div>
-              <div class="sban-desc" style="color:#EF4444">{{ kyc?.reviewRemarks || 'Your KYC was rejected. Please resubmit with correct documents.' }}</div>
+              <div class="sban-title" style="color: #dc2626">KYC Rejected</div>
+              <div class="sban-desc" style="color: #ef4444">
+                {{
+                  kyc?.reviewRemarks ||
+                    'Your KYC was rejected. Please resubmit with correct documents.'
+                }}
+              </div>
             </div>
           </div>
         } @else {
           <div class="status-banner sb-new">
-            <div class="sban-icon" style="background:rgba(108,99,255,.1)">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="#6C63FF" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <div class="sban-icon" style="background: rgba(108, 99, 255, 0.1)">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path
+                  d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z"
+                  stroke="#6C63FF"
+                  stroke-width="1.6"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </div>
             <div>
-              <div class="sban-title" style="color:#4F46E5">Identity Verification Required</div>
-              <div class="sban-desc" style="color:#6C63FF">Submit your Aadhaar and PAN details to verify your identity and create a wallet.</div>
+              <div class="sban-title" style="color: #4f46e5">Identity Verification Required</div>
+              <div class="sban-desc" style="color: #6c63ff">
+                Submit your Aadhaar and PAN details to verify your identity and create a wallet.
+              </div>
             </div>
           </div>
         }
@@ -79,10 +253,21 @@
         <!-- PENDING LOCK NOTICE — no changes while under review -->
         @if (kyc?.status === 'PENDING') {
           <div class="locked-notice">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="5" y="9" width="10" height="8" rx="2" stroke="#F59E0B" stroke-width="1.6"/><path d="M7 9V7a3 3 0 016 0v2" stroke="#F59E0B" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="5" y="9" width="10" height="8" rx="2" stroke="#F59E0B" stroke-width="1.6" />
+              <path
+                d="M7 9V7a3 3 0 016 0v2"
+                stroke="#F59E0B"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
             <div>
               <div class="locked-title">Changes Locked</div>
-              <div class="locked-sub">Your KYC is under review. You cannot make changes until an admin accepts or rejects your submission.</div>
+              <div class="locked-sub">
+                Your KYC is under review. You cannot make changes until an admin accepts or rejects
+                your submission.
+              </div>
             </div>
           </div>
         }
@@ -92,16 +277,32 @@
           <div class="form-card">
             <div class="card-head">
               @if (kyc?.status === 'REJECTED') {
-                <div class="card-head-icon" style="background:rgba(239,68,68,.08)">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#EF4444" stroke-width="1.6"/><path d="M8 8l6 6M14 8l-6 6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/></svg>
+                <div class="card-head-icon" style="background: rgba(239, 68, 68, 0.08)">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke="#EF4444" stroke-width="1.6" />
+                    <path
+                      d="M8 8l6 6M14 8l-6 6"
+                      stroke="#EF4444"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
                 </div>
                 <div>
                   <h3>Resubmit Your Documents</h3>
                   <p>Correct the issue and resubmit your KYC document</p>
                 </div>
               } @else if (kyc?.status === 'PENDING') {
-                <div class="card-head-icon" style="background:rgba(245,158,11,.1)">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="#F59E0B" stroke-width="1.6"/><path d="M11 8V11M11 14V14.01" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round"/></svg>
+                <div class="card-head-icon" style="background: rgba(245, 158, 11, 0.1)">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke="#F59E0B" stroke-width="1.6" />
+                    <path
+                      d="M11 8V11M11 14V14.01"
+                      stroke="#F59E0B"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
                 </div>
                 <div>
                   <h3>Update Your Documents</h3>
@@ -109,7 +310,14 @@
                 </div>
               } @else {
                 <div class="card-head-icon">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z" stroke="#6C63FF" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <path
+                      d="M11 2L19 5.5V10C19 14.8 15.4 18.9 11 21C6.6 18.9 3 14.8 3 10V5.5L11 2Z"
+                      stroke="#6C63FF"
+                      stroke-width="1.6"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
                 </div>
                 <div>
                   <h3>Identity Verification</h3>
@@ -120,12 +328,52 @@
 
             <!-- ID TYPE TOGGLE -->
             <div class="id-type-row">
-              <button class="id-type-btn" [class.active]="idType==='AADHAAR'" (click)="switchIdType('AADHAAR')">
-                <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5 9h4M5 12h6M13 7h1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <button
+                class="id-type-btn"
+                [class.active]="idType === 'AADHAAR'"
+                (click)="switchIdType('AADHAAR')"
+              >
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                  <rect
+                    x="1"
+                    y="3"
+                    width="16"
+                    height="12"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M5 9h4M5 12h6M13 7h1"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                  />
+                </svg>
                 Aadhaar Card
               </button>
-              <button class="id-type-btn" [class.active]="idType==='PAN'" (click)="switchIdType('PAN')">
-                <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5 7h8M5 10h5M5 13h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <button
+                class="id-type-btn"
+                [class.active]="idType === 'PAN'"
+                (click)="switchIdType('PAN')"
+              >
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                  <rect
+                    x="1"
+                    y="3"
+                    width="16"
+                    height="12"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M5 7h8M5 10h5M5 13h3"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                  />
+                </svg>
                 PAN Card
               </button>
             </div>
@@ -135,31 +383,53 @@
               <label class="form-label">
                 {{ idType === 'AADHAAR' ? 'Aadhaar Number' : 'PAN Number' }}
               </label>
-              <input type="text" class="form-input"
+              <input
+                type="text"
+                class="form-input"
                 [(ngModel)]="docNumber"
                 [placeholder]="placeholder"
                 [maxlength]="maxLen"
                 [style.text-transform]="idType === 'PAN' ? 'uppercase' : 'none'"
                 [class.input-ok]="docNumber && isValid"
-                [class.input-err]="docNumber && !isValid" />
+                [class.input-err]="docNumber && !isValid"
+              />
               <div class="field-hint" [class]="hint.cls">{{ hint.text }}</div>
             </div>
 
             <div class="doc-info">
               @if (idType === 'AADHAAR') {
-                <div class="di-row"><span class="di-label">Format</span><span class="di-val">Exactly 12 digits</span></div>
-                <div class="di-row"><span class="di-label">Example</span><span class="di-val">123456789012</span></div>
+                <div class="di-row">
+                  <span class="di-label">Format</span><span class="di-val">Exactly 12 digits</span>
+                </div>
+                <div class="di-row">
+                  <span class="di-label">Example</span><span class="di-val">123456789012</span>
+                </div>
               } @else {
-                <div class="di-row"><span class="di-label">Format</span><span class="di-val">10 alphanumeric, min 4 letters</span></div>
-                <div class="di-row"><span class="di-label">Example</span><span class="di-val">ABCDE1234F</span></div>
+                <div class="di-row">
+                  <span class="di-label">Format</span
+                  ><span class="di-val">10 alphanumeric, min 4 letters</span>
+                </div>
+                <div class="di-row">
+                  <span class="di-label">Example</span><span class="di-val">ABCDE1234F</span>
+                </div>
               }
-              <div class="di-row"><span class="di-label">Review time</span><span class="di-val">1–2 business days</span></div>
+              <div class="di-row">
+                <span class="di-label">Review time</span
+                ><span class="di-val">1–2 business days</span>
+              </div>
             </div>
 
-            <button class="btn-full" [disabled]="!canSubmit" (click)="onSubmit()"
-              [style.background]="kyc?.status === 'REJECTED' ? 'linear-gradient(135deg,#EF4444,#DC2626)' : ''">
+            <button
+              class="btn-full"
+              [disabled]="!canSubmit"
+              (click)="onSubmit()"
+              [style.background]="
+                kyc?.status === 'REJECTED' ? 'linear-gradient(135deg,#EF4444,#DC2626)' : ''
+              "
+            >
               @if (loading) {
-                <div class="btn-spinner"></div> Submitting…
+                <div class="btn-spinner"></div>
+                Submitting…
               } @else if (kyc?.status === 'REJECTED') {
                 Resubmit KYC
               } @else if (kyc?.status === 'PENDING') {
@@ -175,14 +445,33 @@
         @if (kyc?.status === 'APPROVED') {
           <div class="form-card">
             <div class="card-head">
-              <div class="card-head-icon" style="background:rgba(16,185,129,.1)">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M7 11l3 3 5-5" stroke="#10B981" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="card-head-icon" style="background: rgba(16, 185, 129, 0.1)">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path
+                    d="M7 11l3 3 5-5"
+                    stroke="#10B981"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
               </div>
-              <div><h3>Verified Documents</h3><p>Your identity is verified</p></div>
+              <div>
+                <h3>Verified Documents</h3>
+                <p>Your identity is verified</p>
+              </div>
             </div>
             <div class="doc-info">
-              <div class="di-row"><span class="di-label">Status</span><span class="di-val" style="color:#10B981;font-weight:700">Approved ✓</span></div>
-              <div class="di-row"><span class="di-label">Submitted</span><span class="di-val">{{ kyc?.submittedAt ? fmtDate(kyc!.submittedAt) : '—' }}</span></div>
+              <div class="di-row">
+                <span class="di-label">Status</span
+                ><span class="di-val" style="color: #10b981; font-weight: 700">Approved ✓</span>
+              </div>
+              <div class="di-row">
+                <span class="di-label">Submitted</span
+                ><span class="di-val">{{
+                  kyc?.submittedAt ? fmtDate(kyc!.submittedAt) : '—'
+                }}</span>
+              </div>
               @for (doc of kyc?.documents || []; track doc.id) {
                 <div class="di-row">
                   <span class="di-label">{{ doc.documentType }}</span>

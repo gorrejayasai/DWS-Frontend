@@ -4,14 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { TransactionService } from '../../core/services/transaction.service';
-import { TransactionResponse } from '../../core/models/transaction.model';
+import {
+  TransactionResponse,
+  TransactionSummaryResponse,
+} from '../../core/models/transaction.model';
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './transactions.html',
-  styleUrl: './transactions.css'
+  styleUrl: './transactions.css',
 })
 export class TransactionsComponent implements OnInit {
   private auth = inject(AuthService);
@@ -19,7 +22,9 @@ export class TransactionsComponent implements OnInit {
 
   username = '';
   email = '';
-  get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'U'; }
+  get initials(): string {
+    return this.username.slice(0, 2).toUpperCase() || 'U';
+  }
 
   transactions: TransactionResponse[] = [];
   loading = true;
@@ -35,53 +40,107 @@ export class TransactionsComponent implements OnInit {
   searchTerm = '';
 
   get filtered(): TransactionResponse[] {
-    return this.transactions.filter(t => {
+    return this.transactions.filter((t) => {
       const typeMatch = this.filterType === 'ALL' || t.type === this.filterType;
       const statusMatch = this.filterStatus === 'ALL' || t.status === this.filterStatus;
-      const searchMatch = !this.searchTerm ||
+      const searchMatch =
+        !this.searchTerm ||
         t.transactionId.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         t.amount.toString().includes(this.searchTerm);
       return typeMatch && statusMatch && searchMatch;
     });
   }
 
-  get totalReceived(): number {
-    return this.transactions.filter(t => t.type === 'TOPUP' && t.status === 'COMPLETED').reduce((s, t) => s + t.amount, 0);
-  }
-  get totalSent(): number {
-    return this.transactions.filter(t => (t.type === 'TRANSFER' || t.type === 'WITHDRAW') && t.status === 'COMPLETED').reduce((s, t) => s + t.amount, 0);
-  }
-  get pendingCount(): number { return this.transactions.filter(t => t.status === 'PENDING').length; }
-  get failedCount(): number { return this.transactions.filter(t => t.status === 'FAILED').length; }
+  // ─── Summary ────────────────────────────────────────────────────────────────
+  summary: TransactionSummaryResponse | null = null;
+  summaryLoading = true;
+  summaryError = '';
 
+  get totalReceived(): number {
+    if (!this.summary) return 0;
+    return (
+      (this.summary.topup?.totalAmount ?? 0) + (this.summary.transfersReceived?.totalAmount ?? 0)
+    );
+  }
+
+  get totalSent(): number {
+    if (!this.summary) return 0;
+    return (
+      (this.summary.withdraw?.totalAmount ?? 0) + (this.summary.transfersSent?.totalAmount ?? 0)
+    );
+  }
+
+  get totalTransactions(): number {
+    return this.summary?.overall?.totalTransactions ?? 0;
+  }
+
+  get netFlow(): number {
+    return this.summary?.overall?.netFlow ?? 0;
+  }
+
+  // ─── Lifecycle ──────────────────────────────────────────────────────────────
   ngOnInit(): void {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
     this.load(0);
+    this.loadSummary();
   }
 
+  // ─── Data loaders ───────────────────────────────────────────────────────────
   load(page: number): void {
     this.loading = true;
     this.error = '';
     this.txSvc.getMyTransactions(page, this.pageSize).subscribe({
-      next: res => {
+      next: (res) => {
         this.transactions = res.content;
-        this.currentPage = res.currentPage;
+        this.currentPage = res.page;
         this.totalPages = res.totalPages;
         this.totalElements = res.totalElements;
         this.loading = false;
       },
-      error: () => { this.loading = false; this.error = 'Could not load transactions.'; }
+      error: () => {
+        this.loading = false;
+        this.error = 'Could not load transactions.';
+      },
     });
   }
 
-  prevPage(): void { if (this.currentPage > 0) this.load(this.currentPage - 1); }
-  nextPage(): void { if (this.currentPage < this.totalPages - 1) this.load(this.currentPage + 1); }
+  loadSummary(): void {
+    this.summaryLoading = true;
+    this.summaryError = '';
+    this.txSvc.getTransactionSummary().subscribe({
+      next: (s) => {
+        this.summary = s;
+        this.summaryLoading = false;
+      },
+      error: () => {
+        this.summaryLoading = false;
+        this.summaryError = 'Could not load summary.';
+      },
+    });
+  }
 
-  setType(t: typeof this.filterType): void { this.filterType = t; }
+  prevPage(): void {
+    if (this.currentPage > 0) this.load(this.currentPage - 1);
+  }
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) this.load(this.currentPage + 1);
+  }
 
-  logout(): void { this.auth.logout(); }
+  setType(t: typeof this.filterType): void {
+    this.filterType = t;
+    this.load(0); // reset to page 0 on filter change
+  }
+
+  setStatus(s: typeof this.filterStatus): void {
+    this.filterStatus = s;
+    this.load(0);
+  }
+
+  logout(): void {
+    this.auth.logout();
+  }
 
   fmt(n: number): string {
     return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -128,8 +187,12 @@ export class TransactionsComponent implements OnInit {
     return '#6C63FF';
   }
 
-  txSign(type: string): string { return type === 'TOPUP' ? '+' : '-'; }
-  txAmtClass(type: string): string { return type === 'TOPUP' ? 'amt-in' : 'amt-out'; }
+  txSign(type: string): string {
+    return type === 'TOPUP' ? '+' : '-';
+  }
+  txAmtClass(type: string): string {
+    return type === 'TOPUP' ? 'amt-in' : 'amt-out';
+  }
 
   statusClass(s: string): string {
     if (s === 'COMPLETED') return 'st-done';

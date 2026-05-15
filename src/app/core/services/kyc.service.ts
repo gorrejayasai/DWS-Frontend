@@ -11,7 +11,7 @@ export class KycService {
 
   // Backend has no GET /kyc/me — admin can fetch by userId via /kyc/admin/{userId}
   getKycByUserId(userId: number): Observable<KycResponse> {
-    return this.http.get<KycResponse>(`${this.BASE}/kyc/admin/${userId}`);
+    return this.http.get<KycResponse>(`${this.BASE}/kyc/${userId}`);
   }
 
   submitKyc(payload: KycSubmitRequest): Observable<KycResponse> {
