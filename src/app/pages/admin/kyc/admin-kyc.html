@@ -149,7 +149,7 @@
                       }
                     </td>
                     <td class="text-muted">{{ fmtDate(k.submittedAt) }}</td>
-                    <td class="text-muted">{{ k.documents.length }}</td>
+                    <td class="text-muted">{{ k.documents?.length ?? 0 }}</td>
                     <td>
                       @if (k.status === 'PENDING') {
                         <div class="action-btns">
