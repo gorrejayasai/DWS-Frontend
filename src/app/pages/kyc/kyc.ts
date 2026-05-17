@@ -5,20 +5,19 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { KycService } from '../../core/services/kyc.service';
 import { KycResponse } from '../../core/models/kyc.model';
-import { environment } from '../../../environments/environment';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-kyc',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './kyc.html',
   styleUrl: './kyc.css'
 })
 export class KycComponent implements OnInit {
   private auth   = inject(AuthService);
   private kycSvc = inject(KycService);
-
-  readonly apiBase = environment.apiUrl;
 
   username = '';
   email    = '';

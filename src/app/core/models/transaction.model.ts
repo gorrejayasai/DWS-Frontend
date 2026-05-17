@@ -3,6 +3,7 @@ export interface TransactionResponse {
   transactionId: string;
   walletId: number;
   targetWalletId: number | null;
+  targetUserId: number | null;
   userId: number;
   type: 'TOPUP' | 'WITHDRAW' | 'TRANSFER';
   amount: number;
@@ -18,6 +19,27 @@ export interface PaginatedResponse<T> {
   content: T[];
   totalElements: number;
   totalPages: number;
-  currentPage: number;
+  page: number;
   pageSize: number;
+}
+
+export interface AmountCount {
+  totalAmount: number;
+  count: number;
+}
+
+export interface OverallStats {
+  totalTransactions: number;
+  netFlow: number;
+}
+
+export interface TransactionSummaryResponse {
+  walletId: number;
+  currency: string;
+  currentBalance: number;
+  topup: AmountCount;
+  withdraw: AmountCount;
+  transfersSent: AmountCount;
+  transfersReceived: AmountCount;
+  overall: OverallStats;
 }
