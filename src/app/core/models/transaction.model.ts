@@ -3,6 +3,7 @@ export interface TransactionResponse {
   transactionId: string;
   walletId: number;
   targetWalletId: number | null;
+  targetUserId: number | null;
   userId: number;
   type: 'TOPUP' | 'WITHDRAW' | 'TRANSFER';
   amount: number;

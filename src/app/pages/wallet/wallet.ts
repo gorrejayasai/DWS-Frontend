@@ -6,11 +6,13 @@ import { WalletService } from '../../core/services/wallet.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { WalletResponse } from '../../core/models/wallet.model';
 import { TransactionSummaryResponse } from '../../core/models/transaction.model';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './wallet.html',
   styleUrl: './wallet.css',
 })

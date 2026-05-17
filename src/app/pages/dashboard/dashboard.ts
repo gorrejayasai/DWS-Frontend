@@ -6,11 +6,13 @@ import { WalletService } from '../../core/services/wallet.service';
 import { TransactionService } from '../../core/services/transaction.service';
 import { WalletResponse } from '../../core/models/wallet.model';
 import { TransactionResponse, TransactionSummaryResponse } from '../../core/models/transaction.model';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from '../../shared/components/topbar/topbar';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -22,6 +24,7 @@ export class DashboardComponent implements OnInit {
   // ─── User info ─────────────────────────────────────────────────────────────
   username = '';
   email = '';
+  currentUserId = 0;
 
   get initials(): string {
     return this.username.slice(0, 2).toUpperCase() || 'U';
@@ -81,6 +84,7 @@ export class DashboardComponent implements OnInit {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
+    this.currentUserId = user?.userId ?? 0;
     this.loadWallet();
     this.loadTransactions(0);
     this.loadSummary();
@@ -179,25 +183,31 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  txIconClass(type: string): string {
-    if (type === 'TOPUP') return 'ti-in';
-    if (type === 'WITHDRAW') return 'ti-out';
+  txIconClass(tx: TransactionResponse): string {
+    if (tx.type === 'TOPUP') return 'ti-in';
+    if (tx.type === 'WITHDRAW') return 'ti-out';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return 'ti-in';
     return 'ti-transfer';
   }
 
   txLabel(tx: TransactionResponse): string {
     if (tx.type === 'TOPUP') return 'Wallet Top Up';
     if (tx.type === 'WITHDRAW') return 'Withdrawal';
-    return tx.targetWalletId ? `Transfer #${tx.targetWalletId}` : 'Transfer';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId)
+      return `Transfer from Wallet #${tx.walletId}`;
+    return tx.targetWalletId ? `Transfer to Wallet #${tx.targetWalletId}` : 'Transfer';
   }
 
-  txAmtClass(type: string): string {
-    if (type === 'TOPUP') return 'amt-in';
+  txAmtClass(tx: TransactionResponse): string {
+    if (tx.type === 'TOPUP') return 'amt-in';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return 'amt-in';
     return 'amt-out';
   }
 
-  txSign(type: string): string {
-    return type === 'TOPUP' ? '+' : '-';
+  txSign(tx: TransactionResponse): string {
+    if (tx.type === 'TOPUP') return '+';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return '+';
+    return '-';
   }
 
   statusClass(s: string): string {

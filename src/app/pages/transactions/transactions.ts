@@ -8,11 +8,13 @@ import {
   TransactionResponse,
   TransactionSummaryResponse,
 } from '../../core/models/transaction.model';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './transactions.html',
   styleUrl: './transactions.css',
 })
@@ -22,6 +24,8 @@ export class TransactionsComponent implements OnInit {
 
   username = '';
   email = '';
+  currentUserId = 0;
+
   get initials(): string {
     return this.username.slice(0, 2).toUpperCase() || 'U';
   }
@@ -83,6 +87,7 @@ export class TransactionsComponent implements OnInit {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
+    this.currentUserId = user?.userId ?? 0;
     this.load(0);
     this.loadSummary();
   }
@@ -172,26 +177,38 @@ export class TransactionsComponent implements OnInit {
   txLabel(tx: TransactionResponse): string {
     if (tx.type === 'TOPUP') return 'Wallet Top Up';
     if (tx.type === 'WITHDRAW') return 'Withdrawal';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId)
+      return `Transfer from Wallet #${tx.walletId}`;
     return tx.targetWalletId ? `Transfer → #${tx.targetWalletId}` : 'Transfer';
   }
 
-  txIconBg(type: string): string {
-    if (type === 'TOPUP') return 'rgba(16,185,129,.1)';
-    if (type === 'WITHDRAW') return 'rgba(239,68,68,.08)';
+  txIconBg(tx: TransactionResponse): string {
+    if (tx.type === 'TOPUP') return 'rgba(16,185,129,.1)';
+    if (tx.type === 'WITHDRAW') return 'rgba(239,68,68,.08)';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId)
+      return 'rgba(16,185,129,.1)';
     return 'rgba(108,99,255,.1)';
   }
 
-  txIconColor(type: string): string {
-    if (type === 'TOPUP') return '#10B981';
-    if (type === 'WITHDRAW') return '#EF4444';
+  txIconColor(tx: TransactionResponse): string {
+    if (tx.type === 'TOPUP') return '#10B981';
+    if (tx.type === 'WITHDRAW') return '#EF4444';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return '#10B981';
     return '#6C63FF';
   }
 
-  txSign(type: string): string {
-    return type === 'TOPUP' ? '+' : '-';
+  txSign(tx: TransactionResponse): string {
+    console.log(tx.targetUserId);
+    console.log(this.currentUserId);
+    if (tx.type === 'TOPUP') return '+';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return '+';
+    return '-';
   }
-  txAmtClass(type: string): string {
-    return type === 'TOPUP' ? 'amt-in' : 'amt-out';
+
+  txAmtClass(tx: TransactionResponse): string {
+    if (tx.type === 'TOPUP') return 'amt-in';
+    if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return 'amt-in';
+    return 'amt-out';
   }
 
   statusClass(s: string): string {

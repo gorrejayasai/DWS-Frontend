@@ -1,0 +1,73 @@
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--dark);
+  height: 100vh;
+  position: fixed;
+  top: 0; left: 0;
+  display: flex; flex-direction: column;
+  z-index: 100;
+  border-right: 1px solid rgba(255,255,255,.04);
+}
+
+.sb-brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.sb-logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-mid));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sb-name { font-size: 1.125rem; font-weight: 800; color: #fff; }
+
+.sb-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+
+.sb-section {
+  font-size: .625rem; font-weight: 700;
+  color: rgba(255,255,255,.25);
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 0 8px; margin: 16px 0 8px;
+}
+.sb-section:first-child { margin-top: 4px; }
+
+.sb-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 12px; border-radius: 10px;
+  font-size: .9rem; font-weight: 600;
+  color: rgba(255,255,255,.5);
+  text-decoration: none;
+  transition: all .2s;
+  margin-bottom: 2px;
+}
+.sb-link svg { flex-shrink: 0; opacity: .7; }
+.sb-link:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.85); }
+.sb-link.active {
+  background: linear-gradient(135deg, rgba(108,99,255,.25), rgba(139,92,246,.2));
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(108,99,255,.25);
+}
+.sb-link.active svg { opacity: 1; }
+
+.sb-user {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,.05);
+  display: flex; align-items: center; gap: 10px;
+}
+.sb-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), var(--brand-mid));
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.sb-uinfo { flex: 1; min-width: 0; }
+.sb-uname { font-size: .875rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-uemail { font-size: .7rem; color: rgba(255,255,255,.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-logout {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,.3); transition: color .2s;
+  padding: 4px; display: flex; flex-shrink: 0;
+}
+.sb-logout:hover { color: rgba(255,255,255,.75); }

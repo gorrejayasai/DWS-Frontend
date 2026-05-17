@@ -5,9 +5,19 @@ import { environment } from '../../../environments/environment';
 import { WalletResponse } from '../models/wallet.model';
 
 // Backend DTOs — no idempotencyKey (not in backend records)
-export interface TopUpRequest    { amount: number; currency: string; }
-export interface TransferRequest { targetWalletId: number; amount: number; currency: string; }
-export interface WithdrawRequest { amount: number; currency: string; }
+export interface TopUpRequest {
+  amount: number;
+  currency: string;
+}
+export interface TransferRequest {
+  targetUsername: string;
+  amount: number;
+  currency: string;
+}
+export interface WithdrawRequest {
+  amount: number;
+  currency: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class WalletService {
