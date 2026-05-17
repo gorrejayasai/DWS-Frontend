@@ -4,13 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { WalletService } from '../../core/services/wallet.service';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-transfer',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './transfer.html',
-  styleUrl: './transfer.css'
+  styleUrl: './transfer.css',
 })
 export class TransferComponent implements OnInit {
   private auth = inject(AuthService);
@@ -18,15 +20,19 @@ export class TransferComponent implements OnInit {
 
   username = '';
   email = '';
-  get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'U'; }
+  get initials(): string {
+    return this.username.slice(0, 2).toUpperCase() || 'U';
+  }
 
   walletId: number | null = null;
   balance = 0;
   walletLoaded = false;
 
-  targetWalletId: number | null = null;
+  targetUsername = '';
   amount: number | null = null;
-  get amountNum(): number { return this.amount ?? 0; }
+  get amountNum(): number {
+    return this.amount ?? 0;
+  }
 
   loading = false;
   showSuccess = false;
@@ -41,26 +47,38 @@ export class TransferComponent implements OnInit {
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
     this.walletSvc.getMyWallet().subscribe({
-      next: w => {
+      next: (w) => {
         this.walletId = w.id;
         this.balance = w.availableBalance;
         this.walletLoaded = true;
       },
-      error: () => { this.walletLoaded = true; }
+      error: () => {
+        this.walletLoaded = true;
+      },
     });
   }
 
-  selectQuick(amt: number): void { this.amount = amt; this.selectedQuick = amt; this.errorMsg = ''; }
-  onAmountChange(): void { this.selectedQuick = null; this.errorMsg = ''; }
+  selectQuick(amt: number): void {
+    this.amount = amt;
+    this.selectedQuick = amt;
+    this.errorMsg = '';
+  }
+  onAmountChange(): void {
+    this.selectedQuick = null;
+    this.errorMsg = '';
+  }
 
   get selfTransfer(): boolean {
-    return !!this.walletId && !!this.targetWalletId && this.targetWalletId === this.walletId;
+    return (
+      !!this.targetUsername.trim() &&
+      this.targetUsername.trim().toLowerCase() === this.username.toLowerCase()
+    );
   }
 
   get amtHint(): { text: string; cls: string } {
     const v = this.amountNum;
     if (!v) return { text: '', cls: '' };
-    if (v < 1)      return { text: 'Minimum transfer is ₹1', cls: 'err' };
+    if (v < 1) return { text: 'Minimum transfer is ₹1', cls: 'err' };
     if (v > 100000) return { text: 'Maximum transfer is ₹1,00,000 per transaction', cls: 'err' };
     if (v > this.balance) return { text: 'Insufficient balance', cls: 'err' };
     return { text: `₹${v.toLocaleString('en-IN')} will be transferred`, cls: 'ok' };
@@ -72,43 +90,54 @@ export class TransferComponent implements OnInit {
   }
 
   get canSubmit(): boolean {
-    return !!this.walletId && !!this.targetWalletId && !this.selfTransfer &&
-      !!this.amount && this.amountNum >= 1 && this.amountNum <= 100000 &&
-      this.amountNum <= this.balance && !this.loading;
+    return (
+      !!this.walletId &&
+      !!this.targetUsername.trim() &&
+      !this.selfTransfer &&
+      !!this.amount &&
+      this.amountNum >= 1 &&
+      this.amountNum <= 100000 &&
+      this.amountNum <= this.balance &&
+      !this.loading
+    );
   }
 
   onSubmit(): void {
-    if (!this.canSubmit || !this.walletId || !this.targetWalletId) return;
+    if (!this.canSubmit || !this.walletId) return;
     this.loading = true;
     this.errorMsg = '';
 
-    this.walletSvc.transfer(this.walletId, {
-      targetWalletId: this.targetWalletId,
-      amount: this.amountNum,
-      currency: 'INR'
-    }).subscribe({
-      next: (res: any) => {
-        this.loading = false;
-        this.successTxId = res?.transactionId ?? '';
-        this.showSuccess = true;
-        // Reload balance from server to get accurate post-transfer balance
-        this.walletSvc.getMyWallet().subscribe({ next: w => this.balance = w.availableBalance, error: () => {} });
-      },
-      error: (err) => {
-        this.loading = false;
-        const body = err.error;
-        if (body?.message)            this.errorMsg = body.message;
-        else if (typeof body === 'string') this.errorMsg = body;
-        else if (err.status === 400)  this.errorMsg = 'Invalid request or insufficient balance.';
-        else if (err.status === 404)  this.errorMsg = 'Target wallet not found.';
-        else                          this.errorMsg = 'Transfer failed. Please try again.';
-      }
-    });
+    this.walletSvc
+      .transfer(this.walletId, {
+        targetUsername: this.targetUsername.trim(),
+        amount: this.amountNum,
+        currency: 'INR',
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.loading = false;
+          this.successTxId = res?.transactionId ?? '';
+          this.showSuccess = true;
+          this.walletSvc
+            .getMyWallet()
+            .subscribe({ next: (w) => (this.balance = w.availableBalance), error: () => {} });
+        },
+        error: (err) => {
+          this.loading = false;
+          const body = err.error;
+          if (body?.message) this.errorMsg = body.message;
+          else if (typeof body === 'string') this.errorMsg = body;
+          else if (err.status === 400) this.errorMsg = 'Invalid request or insufficient balance.';
+          else if (err.status === 404)
+            this.errorMsg = 'Username not found. Please check and try again.';
+          else this.errorMsg = 'Transfer failed. Please try again.';
+        },
+      });
   }
 
   reset(): void {
     this.amount = null;
-    this.targetWalletId = null;
+    this.targetUsername = '';
     this.selectedQuick = null;
     this.showSuccess = false;
     this.successTxId = '';

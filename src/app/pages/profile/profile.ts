@@ -5,11 +5,13 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { KycService } from '../../core/services/kyc.service';
 import { UserProfile } from '../../core/models/user.model';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
