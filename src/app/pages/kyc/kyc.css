@@ -80,3 +80,17 @@ a{text-decoration:none;color:inherit}
 /* LOADING */
 .loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:16px;color:#9C94C0}
 .spinner-lg{width:48px;height:48px;border:3px solid rgba(108,99,255,.15);border-top-color:#6C63FF;border-radius:50%;animation:spin .8s linear infinite}
+
+/* REQUIRED ASTERISK */
+.req{color:#EF4444;margin-left:2px}
+
+/* FILE UPLOAD AREA */
+.upload-area{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:22px 16px;border-radius:14px;border:2px dashed rgba(108,99,255,.25);background:rgba(108,99,255,.03);cursor:pointer;transition:all .2s;min-height:96px;width:100%}
+.upload-area:hover{border-color:#6C63FF;background:rgba(108,99,255,.07)}
+.upload-area.has-file{border-style:solid;border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.04)}
+.upload-label{font-size:.875rem;font-weight:600;color:#6C63FF}
+.upload-hint{font-size:.75rem;color:#9CA3AF}
+.file-chip{display:flex;align-items:center;gap:8px;background:rgba(108,99,255,.1);color:#4F46E5;font-size:.85rem;font-weight:600;padding:8px 14px;border-radius:20px;max-width:100%;overflow:hidden}
+.file-chip svg{flex-shrink:0}
+.file-remove{background:none;border:none;cursor:pointer;color:#9CA3AF;font-size:.8rem;padding:0 0 0 6px;line-height:1;flex-shrink:0}
+.file-remove:hover{color:#EF4444}

@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { KycService } from '../../core/services/kyc.service';
 import { KycResponse } from '../../core/models/kyc.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-kyc',
@@ -14,28 +15,34 @@ import { KycResponse } from '../../core/models/kyc.model';
   styleUrl: './kyc.css'
 })
 export class KycComponent implements OnInit {
-  private auth = inject(AuthService);
+  private auth   = inject(AuthService);
   private kycSvc = inject(KycService);
 
+  readonly apiBase = environment.apiUrl;
+
   username = '';
-  email = '';
+  email    = '';
   get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'U'; }
 
   kyc: KycResponse | null = null;
   kycLoading = true;
 
-  // Form — ONE ID_PROOF document (Aadhaar OR PAN)
+  // Form fields
   idType: 'AADHAAR' | 'PAN' = 'AADHAAR';
-  docNumber = '';
-  loading = false;
-  errorMsg = '';
+  verifiedName  = '';
+  verifiedDob   = '';
+  docNumber     = '';
+  selectedFile: File | null = null;
+
+  loading    = false;
+  errorMsg   = '';
   successMsg = '';
 
-  // ── Validation ────────────────────────────────────────────────────────
+  // ── Validation ────────────────────────────────────────────────────────────
   get aadhaarRegex() { return /^[0-9]{12}$/; }
   get panRegex()     { return /^[A-Z0-9]{10}$/; }
 
-  get isValid(): boolean {
+  get isDocValid(): boolean {
     if (this.idType === 'AADHAAR') return this.aadhaarRegex.test(this.docNumber);
     return this.panRegex.test(this.docNumber.toUpperCase()) && this.alphabetCount >= 4;
   }
@@ -44,13 +51,20 @@ export class KycComponent implements OnInit {
     return (this.docNumber.match(/[a-zA-Z]/g) || []).length;
   }
 
+  /** Max DOB = 18 years ago today */
+  get maxDob(): string {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 18);
+    return d.toISOString().split('T')[0];
+  }
+
   get hint(): { text: string; cls: string } {
     if (!this.docNumber) {
       return this.idType === 'AADHAAR'
         ? { text: 'Enter your 12-digit Aadhaar number', cls: 'hint' }
         : { text: 'Enter your PAN (e.g. ABCDE1234F)', cls: 'hint' };
     }
-    if (this.isValid) return { text: '✓ Valid format', cls: 'ok' };
+    if (this.isDocValid) return { text: '✓ Valid format', cls: 'ok' };
     return this.idType === 'AADHAAR'
       ? { text: 'Must be exactly 12 digits', cls: 'err' }
       : { text: 'Must be 10 alphanumeric characters with at least 4 letters', cls: 'err' };
@@ -62,11 +76,17 @@ export class KycComponent implements OnInit {
 
   get maxLen(): number { return this.idType === 'AADHAAR' ? 12 : 10; }
 
-  get canSubmit(): boolean { return this.isValid && !this.loading; }
+  get canSubmit(): boolean {
+    return this.isDocValid &&
+           !!this.verifiedName.trim() &&
+           !!this.verifiedDob &&
+           !!this.selectedFile &&
+           !this.loading;
+  }
 
-  // ── Lifecycle ────────────────────────────────────────────────────────
+  // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
-    const user = this.auth.getUser();
+    const user    = this.auth.getUser();
     this.username = user?.username ?? 'User';
     this.email    = user?.email ?? '';
     this.loadKyc(user?.userId);
@@ -76,59 +96,67 @@ export class KycComponent implements OnInit {
     this.kycLoading = true;
     if (!userId) { this.kycLoading = false; return; }
     this.kycSvc.getKycByUserId(userId).subscribe({
-      next: k  => { this.kyc = k; this.kycLoading = false; },
-      error: () => { this.kycLoading = false; }   // 404 = no KYC yet, show form
+      next:  k  => { this.kyc = k; this.kycLoading = false; },
+      error: () => { this.kycLoading = false; }  // 404 = no KYC yet, show form
     });
   }
 
   switchIdType(type: 'AADHAAR' | 'PAN'): void {
-    this.idType = type;
-    this.docNumber = '';
-    this.errorMsg = '';
+    this.idType       = type;
+    this.docNumber    = '';
+    this.selectedFile = null;
+    this.errorMsg     = '';
   }
 
-  // ── Submit ───────────────────────────────────────────────────────────
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  removeFile(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.selectedFile = null;
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────────────
   onSubmit(): void {
     if (!this.canSubmit) return;
-    this.loading  = true;
-    this.errorMsg = '';
+    this.loading    = true;
+    this.errorMsg   = '';
     this.successMsg = '';
 
-    const number = this.idType === 'AADHAAR' ? this.docNumber : this.docNumber.toUpperCase();
-
-    // Backend expects: documentType (ID_PROOF), documentNumber, fileName, fileReference
-    // Only ONE ID_PROOF document is allowed per submission
-    const payload = {
-      documents: [
-        {
-          documentType: 'ID_PROOF' as const,
-          documentNumber: number,
-          fileName: `${this.idType.toLowerCase()}.pdf`,
-          fileReference: `${this.idType}-${number}`
-        }
-      ]
+    const data = {
+      verificationType: this.idType === 'AADHAAR' ? 'AADHAAR_BASED' as const : 'PAN_BASED' as const,
+      verifiedName:  this.verifiedName.trim(),
+      verifiedDob:   this.verifiedDob,
+      documentNumber: this.idType === 'AADHAAR' ? this.docNumber : this.docNumber.toUpperCase()
     };
 
-    // PENDING is now locked (form hidden), so only REJECTED reaches here as an update
     const isUpdate = this.kyc?.status === 'REJECTED';
-    const call = isUpdate ? this.kycSvc.updateKyc(payload) : this.kycSvc.submitKyc(payload);
+    const call     = isUpdate
+      ? this.kycSvc.updateKyc(data, this.selectedFile!)
+      : this.kycSvc.submitKyc(data, this.selectedFile!);
 
     call.subscribe({
       next: res => {
-        this.loading = false;
-        this.kyc = res;
-        this.successMsg = isUpdate
+        this.loading      = false;
+        this.kyc          = res;
+        this.selectedFile = null;
+        this.successMsg   = isUpdate
           ? 'KYC updated successfully. Awaiting admin review.'
           : 'KYC submitted successfully. An admin will review your documents.';
       },
       error: err => {
         this.loading = false;
-        const body = err.error;
-        if (err.status === 403)               this.errorMsg = 'Resubmission is temporarily unavailable. Please contact support.';
-        else if (body?.message)               this.errorMsg = body.message;
-        else if (typeof body === 'string')    this.errorMsg = body;
-        else if (err.status === 409)          this.errorMsg = 'A KYC record already exists. Please contact support if you cannot resubmit.';
-        else                                  this.errorMsg = 'Submission failed. Please try again.';
+        const body   = err.error;
+        if      (err.status === 403)       this.errorMsg = 'Submission not allowed. Please contact support.';
+        else if (body?.message)            this.errorMsg = body.message;
+        else if (typeof body === 'string') this.errorMsg = body;
+        else if (err.status === 409)       this.errorMsg = 'A KYC record already exists. Contact support to reset.';
+        else                               this.errorMsg = 'Submission failed. Please try again.';
       }
     });
   }

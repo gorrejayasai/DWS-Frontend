@@ -2,24 +2,30 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { KycSubmitRequest, KycResponse } from '../models/kyc.model';
+import { KycSubmitData, KycResponse } from '../models/kyc.model';
 
 @Injectable({ providedIn: 'root' })
 export class KycService {
   private http = inject(HttpClient);
   private BASE = environment.apiUrl;
 
-  // Backend has no GET /kyc/me — admin can fetch by userId via /kyc/admin/{userId}
   getKycByUserId(userId: number): Observable<KycResponse> {
-    return this.http.get<KycResponse>(`${this.BASE}/kyc/admin/${userId}`);
+    // GET /kyc/{userId} — works for both USER (own) and ADMIN (any)
+    return this.http.get<KycResponse>(`${this.BASE}/kyc/${userId}`);
   }
 
-  submitKyc(payload: KycSubmitRequest): Observable<KycResponse> {
-    return this.http.post<KycResponse>(`${this.BASE}/kyc/submit`, payload);
+  submitKyc(data: KycSubmitData, file: File): Observable<KycResponse> {
+    const fd = new FormData();
+    // 'data' part must be application/json so Spring can deserialize it with @RequestPart
+    fd.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    fd.append('file', file, file.name);
+    return this.http.post<KycResponse>(`${this.BASE}/kyc/submit`, fd);
   }
 
-  // Correct backend URL: PUT /kyc/user/update
-  updateKyc(payload: KycSubmitRequest): Observable<KycResponse> {
-    return this.http.put<KycResponse>(`${this.BASE}/kyc/user/update`, payload);
+  updateKyc(data: KycSubmitData, file: File): Observable<KycResponse> {
+    const fd = new FormData();
+    fd.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    fd.append('file', file, file.name);
+    return this.http.put<KycResponse>(`${this.BASE}/kyc/user/update`, fd);
   }
 }
