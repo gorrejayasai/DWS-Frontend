@@ -1,0 +1,75 @@
+<div class="topbar">
+  <div class="topbar-left">
+    <h1>{{ title }}</h1>
+    @if (subtitle) {
+      <p>{{ subtitle }}</p>
+    }
+  </div>
+
+  <div class="topbar-right">
+    @if (showNotifications) {
+      <div class="notif-wrap">
+        <button class="notif-btn" [class.open]="panelOpen" (click)="togglePanel()" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M9 2a5 5 0 00-5 5v3l-2 2v1h14v-1l-2-2V7a5 5 0 00-5-5zM7 15a2 2 0 004 0"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        @if (panelOpen) {
+          <div class="notif-panel">
+            <div class="np-header">
+              <h4>Notifications</h4>
+              <a routerLink="/notifications" class="np-view-all" (click)="closePanel()">View All</a>
+            </div>
+
+            @if (notifLoading) {
+              <div class="np-state">
+                <div class="np-spinner"></div>
+                <span>Loading…</span>
+              </div>
+            } @else if (recentNotifs.length === 0) {
+              <div class="np-state">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <path d="M18 4a10 10 0 00-10 10v6l-4 4v2h28v-2l-4-4V14A10 10 0 0018 4zM14 30a4 4 0 008 0"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>No notifications yet</span>
+              </div>
+            } @else {
+              <div class="np-list">
+                @for (n of recentNotifs; track n.id) {
+                  <div class="np-item">
+                    <div class="np-icon" [style.background]="n.iconBg">
+                      @if (n.iconType === 'up') {
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 13V3M4 7l4-4 4 4" [attr.stroke]="n.iconColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      } @else if (n.iconType === 'down') {
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M4 9l4 4 4-4" [attr.stroke]="n.iconColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      } @else if (n.iconType === 'transfer') {
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 5l4 3-4 3" [attr.stroke]="n.iconColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      } @else if (n.iconType === 'shield') {
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L14 4V7C14 11 11 14 8 15C5 14 2 11 2 7V4L8 1Z" [attr.stroke]="n.iconColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                      } @else {
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" [attr.stroke]="n.iconColor" stroke-width="1.4"/><path d="M8 6v2.5M8 11v.01" [attr.stroke]="n.iconColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                      }
+                    </div>
+                    <div class="np-body">
+                      <div class="np-title">{{ n.title }}</div>
+                      <div class="np-desc">{{ n.desc }}</div>
+                      <div class="np-time">{{ n.group }} · {{ n.time }}</div>
+                    </div>
+                  </div>
+                }
+              </div>
+              <div class="np-footer">
+                <a routerLink="/notifications" (click)="closePanel()">View All Notifications →</a>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <a routerLink="/profile" class="topbar-av" title="Profile">{{ initials }}</a>
+  </div>
+</div>

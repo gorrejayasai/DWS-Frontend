@@ -5,11 +5,13 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { KycService } from '../../core/services/kyc.service';
 import { KycResponse } from '../../core/models/kyc.model';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-kyc',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './kyc.html',
   styleUrl: './kyc.css'
 })

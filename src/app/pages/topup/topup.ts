@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { WalletService } from '../../core/services/wallet.service';
+import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
+import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-topup',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
   templateUrl: './topup.html',
   styleUrl: './topup.css'
 })
