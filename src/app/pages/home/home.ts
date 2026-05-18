@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -11,8 +11,9 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './home.css'
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
-  private auth = inject(AuthService);
-  private zone = inject(NgZone);
+  private auth   = inject(AuthService);
+  private router = inject(Router);
+  private zone   = inject(NgZone);
 
   navScrolled = false;
   isLoggedIn = false;
@@ -43,6 +44,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoggedIn = this.auth.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.router.navigate([this.auth.isAdmin() ? '/admin/dashboard' : '/dashboard']);
+    }
   }
 
   ngAfterViewInit(): void {
