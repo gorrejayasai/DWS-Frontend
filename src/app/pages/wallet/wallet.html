@@ -152,7 +152,7 @@
                 <div class="spend-row">
                   <span class="spend-label">Top Ups</span>
                   <div class="spend-bar">
-                    <div class="spend-fill" style="background: #10b981; width: 100%"></div>
+                    <div class="spend-fill" [style.width]="totalIn > 0 ? '100%' : '0%'" style="background: #10b981"></div>
                   </div>
                   <span class="spend-val">{{ fmt(totalIn) }}</span>
                 </div>
