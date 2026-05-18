@@ -149,7 +149,28 @@
                       }
                     </td>
                     <td class="text-muted">{{ fmtDate(k.submittedAt) }}</td>
-                    <td class="text-muted">{{ k.documents?.length ?? 0 }}</td>
+                    <td>
+                      @if ((k.documents?.length ?? 0) === 0) {
+                        <span class="text-muted">—</span>
+                      } @else {
+                        <div class="doc-btns">
+                          @for (doc of k.documents; track doc.id) {
+                            <button
+                              class="btn-doc"
+                              [disabled]="docLoading === doc.id"
+                              (click)="openDocument(doc.id)"
+                              [title]="doc.fileName"
+                            >
+                              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                                <path d="M3 1h6l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V2a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                                <path d="M9 1v3h3" stroke="currentColor" stroke-width="1.4"/>
+                              </svg>
+                              {{ docLoading === doc.id ? '…' : (doc.verificationType === 'AADHAAR_BASED' ? 'Aadhaar' : 'PAN') }}
+                            </button>
+                          }
+                        </div>
+                      }
+                    </td>
                     <td>
                       @if (k.status === 'PENDING') {
                         <div class="action-btns">

@@ -10,15 +10,15 @@ export interface KycSubmitData {
 export interface KycDocumentResponse {
   id: number;
   verificationType: 'PAN_BASED' | 'AADHAAR_BASED';
-  verifiedName: string;
-  verifiedDob: string;
+  verifiedName: string | null;
+  verifiedDob: string | null;
   documentNumber: string;
   fileName: string;
   fileReference: string;
-  documentMimeType: string;
-  documentUrl: string;          // e.g. /kyc/document/123
+  documentMimeType: string | null;
+  documentUrl: string | null;         // e.g. /kyc/document/123
   uploadedAt: string;
-  documentType: 'ID_PROOF' | 'ADDRESS_PROOF';  // legacy field
+  documentType: 'ID_PROOF' | 'ADDRESS_PROOF' | null;  // legacy field
 }
 
 export interface KycResponse {
