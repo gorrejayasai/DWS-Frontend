@@ -28,7 +28,7 @@ export class TransferComponent implements OnInit {
   balance = 0;
   walletLoaded = false;
 
-  targetWalletId: number | null = null;
+  targetUsername = '';
   amount: number | null = null;
   get amountNum(): number {
     return this.amount ?? 0;
@@ -69,7 +69,8 @@ export class TransferComponent implements OnInit {
   }
 
   get selfTransfer(): boolean {
-    return !!this.targetWalletId && this.targetWalletId === this.walletId;
+    return !!this.targetUsername.trim() &&
+      this.targetUsername.trim().toLowerCase() === this.username.toLowerCase();
   }
 
   get amtHint(): { text: string; cls: string } {
@@ -81,15 +82,10 @@ export class TransferComponent implements OnInit {
     return { text: `₹${v.toLocaleString('en-IN')} will be transferred`, cls: 'ok' };
   }
 
-  get targetHint(): string {
-    if (this.selfTransfer) return 'Cannot transfer to your own wallet';
-    return '';
-  }
-
   get canSubmit(): boolean {
     return (
       !!this.walletId &&
-      !!this.targetWalletId &&
+      !!this.targetUsername.trim() &&
       !this.selfTransfer &&
       !!this.amount &&
       this.amountNum >= 1 &&
@@ -100,13 +96,13 @@ export class TransferComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.canSubmit || !this.walletId || !this.targetWalletId) return;
+    if (!this.canSubmit || !this.walletId) return;
     this.loading = true;
     this.errorMsg = '';
 
     this.walletSvc
       .transfer(this.walletId, {
-        targetWalletId: this.targetWalletId,
+        targetUsername: this.targetUsername.trim(),
         amount: this.amountNum,
         currency: 'INR',
       })
@@ -126,7 +122,7 @@ export class TransferComponent implements OnInit {
           else if (typeof body === 'string') this.errorMsg = body;
           else if (err.status === 400) this.errorMsg = 'Invalid request or insufficient balance.';
           else if (err.status === 404)
-            this.errorMsg = 'Wallet ID not found. Please check and try again.';
+            this.errorMsg = 'User not found. Please check the username and try again.';
           else this.errorMsg = 'Transfer failed. Please try again.';
         },
       });
@@ -134,7 +130,7 @@ export class TransferComponent implements OnInit {
 
   reset(): void {
     this.amount = null;
-    this.targetWalletId = null;
+    this.targetUsername = '';
     this.selectedQuick = null;
     this.showSuccess = false;
     this.successTxId = '';

@@ -117,10 +117,11 @@
                 <div class="ps-lbl">Member since</div>
               </div>
               <div class="ps">
-                <div class="ps-val" style="color: var(--success)">
-                  {{ profile?.status ?? 'ACTIVE' }}
+                <div class="ps-val"
+                  [style.color]="walletStatus === 'ACTIVE' ? 'var(--success)' : walletStatus === 'FROZEN' ? 'var(--warning, #F59E0B)' : 'var(--danger)'">
+                  {{ walletStatus }}
                 </div>
-                <div class="ps-lbl">Status</div>
+                <div class="ps-lbl">Wallet Status</div>
               </div>
             </div>
           </div>
@@ -178,11 +179,11 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Account Status</label>
+                  <label class="form-label">Wallet Status</label>
                   <input
                     type="text"
                     class="form-input"
-                    [value]="profile?.status ?? 'ACTIVE'"
+                    [value]="walletStatus"
                     disabled
                   />
                 </div>
