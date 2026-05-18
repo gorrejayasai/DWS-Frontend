@@ -28,7 +28,7 @@ export class TransferComponent implements OnInit {
   balance = 0;
   walletLoaded = false;
 
-  targetUsername = '';
+  targetWalletId: number | null = null;
   amount: number | null = null;
   get amountNum(): number {
     return this.amount ?? 0;
@@ -69,10 +69,7 @@ export class TransferComponent implements OnInit {
   }
 
   get selfTransfer(): boolean {
-    return (
-      !!this.targetUsername.trim() &&
-      this.targetUsername.trim().toLowerCase() === this.username.toLowerCase()
-    );
+    return !!this.targetWalletId && this.targetWalletId === this.walletId;
   }
 
   get amtHint(): { text: string; cls: string } {
@@ -92,7 +89,7 @@ export class TransferComponent implements OnInit {
   get canSubmit(): boolean {
     return (
       !!this.walletId &&
-      !!this.targetUsername.trim() &&
+      !!this.targetWalletId &&
       !this.selfTransfer &&
       !!this.amount &&
       this.amountNum >= 1 &&
@@ -103,13 +100,13 @@ export class TransferComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.canSubmit || !this.walletId) return;
+    if (!this.canSubmit || !this.walletId || !this.targetWalletId) return;
     this.loading = true;
     this.errorMsg = '';
 
     this.walletSvc
       .transfer(this.walletId, {
-        targetUsername: this.targetUsername.trim(),
+        targetWalletId: this.targetWalletId,
         amount: this.amountNum,
         currency: 'INR',
       })
@@ -129,7 +126,7 @@ export class TransferComponent implements OnInit {
           else if (typeof body === 'string') this.errorMsg = body;
           else if (err.status === 400) this.errorMsg = 'Invalid request or insufficient balance.';
           else if (err.status === 404)
-            this.errorMsg = 'Username not found. Please check and try again.';
+            this.errorMsg = 'Wallet ID not found. Please check and try again.';
           else this.errorMsg = 'Transfer failed. Please try again.';
         },
       });
@@ -137,7 +134,7 @@ export class TransferComponent implements OnInit {
 
   reset(): void {
     this.amount = null;
-    this.targetUsername = '';
+    this.targetWalletId = null;
     this.selectedQuick = null;
     this.showSuccess = false;
     this.successTxId = '';
