@@ -30,6 +30,9 @@ export class WalletComponent implements OnInit {
   wallet: WalletResponse | null = null;
   walletLoading = true;
   walletError = '';
+  freezeLoading = false;
+  freezeError = '';
+  freezeSuccess = '';
 
   summary: TransactionSummaryResponse | null = null;
   summaryLoading = true;
@@ -82,6 +85,32 @@ export class WalletComponent implements OnInit {
       error: () => {
         this.summaryLoading = false;
       },
+    });
+  }
+
+  toggleFreeze(): void {
+    if (!this.wallet) return;
+    this.freezeLoading = true;
+    this.freezeError   = '';
+    this.freezeSuccess = '';
+    const isFrozen = this.wallet.status === 'FROZEN';
+    const call = isFrozen
+      ? this.walletSvc.unfreezeWallet(this.wallet.id)
+      : this.walletSvc.freezeWallet(this.wallet.id);
+    call.subscribe({
+      next: w => {
+        this.wallet       = w;
+        this.freezeLoading = false;
+        this.freezeSuccess = isFrozen
+          ? 'Wallet unfrozen successfully. You can now make transactions.'
+          : 'Wallet frozen. All transactions are paused until you unfreeze.';
+        setTimeout(() => this.freezeSuccess = '', 4000);
+      },
+      error: err => {
+        this.freezeLoading = false;
+        this.freezeError   = err?.error?.message ?? 'Could not update wallet status. Please try again.';
+        setTimeout(() => this.freezeError = '', 4000);
+      }
     });
   }
 

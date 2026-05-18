@@ -22,7 +22,9 @@ export class SidebarComponent {
     return this.username.slice(0, 2).toUpperCase() || 'U';
   }
 
-  logout(): void {
-    this.auth.logout();
-  }
+  showLogoutModal = false;
+
+  logout(): void { this.showLogoutModal = true; }
+  closeLogoutModal(): void { this.showLogoutModal = false; }
+  doLogout(): void { this.showLogoutModal = false; this.auth.logout(); }
 }

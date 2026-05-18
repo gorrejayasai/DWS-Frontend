@@ -40,6 +40,9 @@ export class AdminSettingsComponent {
     setTimeout(() => { this.saved = false; }, 2000);
   }
 
+  showLogoutModal = false;
   toggleSidebar(): void { this.sidebarExpanded = !this.sidebarExpanded; }
-  logout(): void { this.auth.logout(); }
+  logout(): void { this.showLogoutModal = true; }
+  closeLogoutModal(): void { this.showLogoutModal = false; }
+  doLogout(): void { this.showLogoutModal = false; this.auth.logout(); }
 }

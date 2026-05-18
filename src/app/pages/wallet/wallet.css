@@ -84,3 +84,17 @@ a{text-decoration:none;color:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 .error-state{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:16px;padding:24px;font-size:.9375rem;color:var(--text-2)}
 .error-state a{color:var(--brand);font-weight:700}
+
+/* FREEZE / UNFREEZE */
+.freeze-success,.freeze-error{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:.875rem;font-weight:600}
+.freeze-success{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#059669}
+.freeze-error{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.18);color:#DC2626}
+.freeze-row{padding-top:18px;border-top:1px solid var(--border);margin-top:6px;display:flex;flex-direction:column;gap:8px}
+.btn-freeze{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:10px;border:1.5px solid rgba(245,158,11,.4);background:rgba(245,158,11,.06);color:#B45309;font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-freeze:hover:not(:disabled){background:#F59E0B;color:#fff;border-color:#F59E0B}
+.btn-freeze:disabled{opacity:.5;cursor:not-allowed}
+.btn-freeze svg{stroke:currentColor;fill:none;flex-shrink:0}
+.btn-unfreeze{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06);color:#059669}
+.btn-unfreeze:hover:not(:disabled){background:#10B981;color:#fff;border-color:#10B981}
+.freeze-hint{font-size:.75rem;color:var(--text-3);margin:0}
+.btn-spin{width:14px;height:14px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}

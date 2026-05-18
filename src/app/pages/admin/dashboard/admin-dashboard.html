@@ -150,3 +150,24 @@
     </div>
   </div>
 </div>
+
+<!-- LOGOUT CONFIRM MODAL -->
+@if (showLogoutModal) {
+  <div class="modal-overlay" (click)="closeLogoutModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">Confirm Logout</div>
+        <button class="modal-close" (click)="closeLogoutModal()">
+          <svg viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub">Are you sure you want to logout from your admin session?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeLogoutModal()">Cancel</button>
+        <button class="btn-confirm-logout" (click)="doLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+}

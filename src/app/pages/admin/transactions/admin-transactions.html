@@ -66,12 +66,6 @@
     </div>
 
     <div class="content">
-      <!-- INFO NOTE -->
-      <div class="info-note">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Showing transactions for the admin account. A platform-wide view requires a <code>/transactions/admin/all</code> backend endpoint.
-      </div>
-
       <!-- STATS -->
       <div class="mini-stats">
         <div class="mini-card">
@@ -128,22 +122,24 @@
             <table>
               <thead>
                 <tr>
-                  <th>Transaction ID</th>
+                  <th>Txn ID</th>
                   <th>Type</th>
                   <th>Amount</th>
                   <th>Status</th>
-                  <th>Wallet ID</th>
+                  <th>Wallet</th>
+                  <th>User ID</th>
                   <th>Date</th>
                 </tr>
               </thead>
               <tbody>
                 @for (tx of filtered; track tx.id) {
                   <tr>
-                    <td class="uid-cell">#{{ shortId(tx.id) }}</td>
+                    <td class="uid-cell">#{{ shortId(tx.transactionId ?? tx.id) }}</td>
                     <td><span class="type-badge" [class]="typeClass(tx.type)">{{ tx.type }}</span></td>
                     <td><span [class]="amtClass(tx.type)" class="amt">{{ fmtAmt(tx.amount, tx.type) }}</span></td>
                     <td><span class="badge" [class]="statusClass(tx.status)">{{ tx.status }}</span></td>
                     <td class="text-muted">{{ tx.walletId ?? '—' }}</td>
+                    <td class="text-muted">{{ tx.userId ?? '—' }}</td>
                     <td class="text-muted">{{ fmtDate(tx.createdAt) }}</td>
                   </tr>
                 }
@@ -168,3 +164,24 @@
     </div>
   </div>
 </div>
+
+<!-- LOGOUT CONFIRM MODAL -->
+@if (showLogoutModal) {
+  <div class="modal-overlay" (click)="closeLogoutModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">Confirm Logout</div>
+        <button class="modal-close" (click)="closeLogoutModal()">
+          <svg viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub">Are you sure you want to logout from your admin session?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeLogoutModal()">Cancel</button>
+        <button class="btn-confirm-logout" (click)="doLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+}

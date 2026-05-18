@@ -64,3 +64,28 @@
     </button>
   </div>
 </aside>
+
+@if (showLogoutModal) {
+  <div class="lm-overlay" (click)="closeLogoutModal()">
+    <div class="lm-card" (click)="$event.stopPropagation()">
+      <div class="lm-header">
+        <div class="lm-title">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M7 3H3a1 1 0 00-1 1v10a1 1 0 001 1h4M12 13l4-4-4-4M16 9H6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Logout
+        </div>
+        <button class="lm-close" (click)="closeLogoutModal()">
+          <svg viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="lm-body">
+        <p>Are you sure you want to logout from PayVault?</p>
+      </div>
+      <div class="lm-footer">
+        <button class="lm-cancel" (click)="closeLogoutModal()">Cancel</button>
+        <button class="lm-confirm" (click)="doLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+}

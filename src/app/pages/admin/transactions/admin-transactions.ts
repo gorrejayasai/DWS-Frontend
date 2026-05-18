@@ -59,11 +59,11 @@ export class AdminTransactionsComponent implements OnInit {
     });
   }
 
-  /* ── Load transactions via /transactions/me ──────────────────────────── */
+  /* ── Load ALL transactions via /transactions/admin/all ───────────────── */
   loadTransactions(): void {
     this.listLoading = true;
     this.listError   = '';
-    this.txSvc.getMyTransactions(this.currentPage, this.pageSize).subscribe({
+    this.adminSvc.getAllTransactions(this.currentPage, this.pageSize).subscribe({
       next: (res: any) => {
         this.transactions  = res.content ?? [];
         this.totalElements = res.totalElements ?? 0;
@@ -73,10 +73,10 @@ export class AdminTransactionsComponent implements OnInit {
       },
       error: (err: any) => {
         const status = err?.status;
-        if (status === 404 || status === 400)
-          this.listError = 'No wallet found for admin account — transactions require an active wallet.';
-        else if (status === 0)
+        if (status === 0)
           this.listError = 'Cannot reach server — is the backend running?';
+        else if (status === 403)
+          this.listError = 'Access denied — admin role required.';
         else
           this.listError = `Failed to load transactions (HTTP ${status ?? 'unknown'}).`;
         this.listLoading = false;
@@ -116,8 +116,11 @@ export class AdminTransactionsComponent implements OnInit {
     if (this.currentPage < this.totalPages - 1) { this.currentPage++; this.loadTransactions(); }
   }
 
+  showLogoutModal = false;
   toggleSidebar(): void { this.sidebarExpanded = !this.sidebarExpanded; }
-  logout(): void { this.auth.logout(); }
+  logout(): void { this.showLogoutModal = true; }
+  closeLogoutModal(): void { this.showLogoutModal = false; }
+  doLogout(): void { this.showLogoutModal = false; this.auth.logout(); }
 
   fmtDate(d: string): string {
     if (!d) return '—';

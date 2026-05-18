@@ -99,6 +99,20 @@
           </a>
         </div>
 
+        <!-- FREEZE / UNFREEZE FEEDBACK -->
+        @if (freezeSuccess) {
+          <div class="freeze-success">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5 6.5-7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ freezeSuccess }}
+          </div>
+        }
+        @if (freezeError) {
+          <div class="freeze-error">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#EF4444" stroke-width="1.5"/><path d="M8 5v4M8 11h.01" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round"/></svg>
+            {{ freezeError }}
+          </div>
+        }
+
         <!-- DETAILS GRID -->
         <div class="details-grid">
           <div class="det-card">
@@ -138,6 +152,35 @@
               <span class="det-key">Created On</span
               ><span class="det-val">{{ fmtDate(wallet.createdAt) }}</span>
             </div>
+            <!-- FREEZE / UNFREEZE — user can toggle, but cannot close wallet -->
+            @if (wallet.status === 'ACTIVE' || wallet.status === 'FROZEN') {
+              <div class="freeze-row">
+                <button
+                  class="btn-freeze"
+                  [class.btn-unfreeze]="wallet.status === 'FROZEN'"
+                  [disabled]="freezeLoading"
+                  (click)="toggleFreeze()"
+                >
+                  @if (freezeLoading) {
+                    <div class="btn-spin"></div>
+                    {{ wallet.status === 'FROZEN' ? 'Unfreezing…' : 'Freezing…' }}
+                  } @else if (wallet.status === 'FROZEN') {
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    Unfreeze Wallet
+                  } @else {
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="4" y="7" width="8" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M6 7V5a2 2 0 014 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    Freeze Wallet
+                  }
+                </button>
+                <p class="freeze-hint">
+                  @if (wallet.status === 'FROZEN') {
+                    Wallet is frozen. Unfreeze to resume transactions.
+                  } @else {
+                    Temporarily pause all transactions on this wallet.
+                  }
+                </p>
+              </div>
+            }
           </div>
           <div class="det-card">
             <h3>Spending Breakdown</h3>

@@ -221,6 +221,9 @@ export class AdminHealthComponent implements OnInit, OnDestroy {
     return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   }
 
+  showLogoutModal = false;
   toggleSidebar(): void { this.sidebarExpanded = !this.sidebarExpanded; }
-  logout(): void { this.auth.logout(); }
+  logout(): void { this.showLogoutModal = true; }
+  closeLogoutModal(): void { this.showLogoutModal = false; }
+  doLogout(): void { this.showLogoutModal = false; this.auth.logout(); }
 }

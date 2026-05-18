@@ -53,8 +53,11 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
+  showLogoutModal = false;
   toggleSidebar(): void { this.sidebarExpanded = !this.sidebarExpanded; }
-  logout(): void { this.auth.logout(); }
+  logout(): void { this.showLogoutModal = true; }
+  closeLogoutModal(): void { this.showLogoutModal = false; }
+  doLogout(): void { this.showLogoutModal = false; this.auth.logout(); }
 
   fmtDate(d: string): string {
     if (!d) return '—';

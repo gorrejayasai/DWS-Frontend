@@ -42,4 +42,14 @@ export class WalletService {
   withdraw(walletId: number, payload: WithdrawRequest): Observable<any> {
     return this.http.post(`${this.BASE}/wallets/${walletId}/withdraw`, payload);
   }
+
+  // Backend: PUT /wallets/{walletId}/freeze
+  freezeWallet(walletId: number): Observable<WalletResponse> {
+    return this.http.put<WalletResponse>(`${this.BASE}/wallets/${walletId}/freeze`, {});
+  }
+
+  // Backend: PUT /wallets/{walletId}/unfreeze
+  unfreezeWallet(walletId: number): Observable<WalletResponse> {
+    return this.http.put<WalletResponse>(`${this.BASE}/wallets/${walletId}/unfreeze`, {});
+  }
 }
