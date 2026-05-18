@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PaginatedResponse, TransactionResponse } from '../models/transaction.model';
 import { KycResponse } from '../models/kyc.model';
+import { WalletResponse } from '../models/wallet.model';
 
 export interface AdminUser {
   id: number;
@@ -58,5 +59,10 @@ export class AdminService {
     return this.http.get<PaginatedResponse<TransactionResponse>>(
       `${this.BASE}/transactions/admin/all?page=${page}&size=${size}`
     );
+  }
+
+  // ── Wallets ───────────────────────────────────────────────────────────────
+  getAllWallets(): Observable<WalletResponse[]> {
+    return this.http.get<WalletResponse[]>(`${this.BASE}/wallets/admin/all`);
   }
 }
