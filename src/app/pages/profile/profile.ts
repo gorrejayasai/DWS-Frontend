@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { KycService } from '../../core/services/kyc.service';
+import { WalletService } from '../../core/services/wallet.service';
 import { UserProfile } from '../../core/models/user.model';
 import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
 import { TopbarComponent } from "../../shared/components/topbar/topbar";
@@ -18,10 +19,12 @@ import { TopbarComponent } from "../../shared/components/topbar/topbar";
 export class ProfileComponent implements OnInit {
   private auth = inject(AuthService);
   private kycSvc = inject(KycService);
+  private walletSvc = inject(WalletService);
   private router = inject(Router);
 
   profile: UserProfile | null = null;
   kycStatus: 'PENDING' | 'APPROVED' | 'REJECTED' | 'NOT_SUBMITTED' = 'NOT_SUBMITTED';
+  walletStatus = 'ACTIVE';
   loading = true;
   saving = false;
   saveSuccess = false;
@@ -71,6 +74,12 @@ export class ProfileComponent implements OnInit {
         error: ()  => { this.kycStatus = 'NOT_SUBMITTED'; }
       });
     }
+
+    // Load wallet status (ACTIVE / FROZEN / CLOSED)
+    this.walletSvc.getMyWallet().subscribe({
+      next: (w) => { this.walletStatus = w.status ?? 'ACTIVE'; },
+      error: ()  => { /* wallet not created yet — keep default */ }
+    });
   }
 
   switchTab(tab: 'personal' | 'security'): void {

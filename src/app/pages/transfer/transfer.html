@@ -3,13 +3,13 @@
   <app-sidebar />
 
   <div class="main">
-    <app-topbar title="Transfer Money" subtitle="Send funds to another PayVault wallet" />
+    <app-topbar title="Transfer Money" subtitle="Send funds to another PayVault user" />
 
     <div class="content">
       <div class="page-grid">
         <div class="form-card">
           <h2>Send Money</h2>
-          <p class="card-sub">Enter the recipient's Wallet ID and amount.</p>
+          <p class="card-sub">Enter the recipient's username and amount.</p>
 
           @if (errorMsg) {
             <div class="error-box">{{ errorMsg }}</div>
@@ -21,16 +21,16 @@
             <strong>{{ fmt(balance) }}</strong>
           </div>
 
-          <!-- Recipient wallet ID -->
+          <!-- Recipient username -->
           <div class="form-group">
-            <label class="form-label">Recipient Wallet ID</label>
-            <input type="number" class="form-input" [(ngModel)]="targetWalletId" (ngModelChange)="errorMsg=''"
-              placeholder="Enter recipient's Wallet ID"
+            <label class="form-label">Recipient Username</label>
+            <input type="text" class="form-input" [(ngModel)]="targetUsername" (ngModelChange)="errorMsg=''"
+              placeholder="Enter PayVault username"
               [class.input-err]="selfTransfer" />
             @if (selfTransfer) {
-              <div class="amt-hint err">Cannot transfer to your own wallet</div>
+              <div class="amt-hint err">Cannot transfer to yourself</div>
             } @else {
-              <div class="field-hint">Enter the recipient's PayVault Wallet ID (visible on their wallet page)</div>
+              <div class="field-hint">Enter the recipient's PayVault username</div>
             }
           </div>
 
@@ -66,11 +66,11 @@
           </div>
 
           <!-- Summary -->
-          @if (targetWalletId && amountNum > 0) {
+          @if (targetUsername.trim() && amountNum > 0) {
             <div class="summary-card">
               <div class="sum-head"><h4>Transfer Summary</h4></div>
               <div class="sum-rows">
-                <div class="sum-row"><span class="sum-key">To Wallet</span><span class="sum-val">#{{ targetWalletId }}</span></div>
+                <div class="sum-row"><span class="sum-key">To</span><span class="sum-val">&#64;{{ targetUsername.trim() }}</span></div>
                 <div class="sum-row"><span class="sum-key">Amount</span><span class="sum-val">{{ fmt(amountNum) }}</span></div>
                 <div class="sum-row sum-total"><span class="sum-key">Total Deducted</span><span class="sum-val">{{ fmt(amountNum) }}</span></div>
               </div>
@@ -94,8 +94,8 @@
             <div class="info-step">
               <div class="is-num">1</div>
               <div>
-                <strong>Enter Wallet ID</strong>
-                <p>Enter the recipient's PayVault Wallet ID.</p>
+                <strong>Enter Username</strong>
+                <p>Enter the recipient's PayVault username.</p>
               </div>
             </div>
             <div class="info-step">
@@ -132,7 +132,7 @@
       <div class="modal-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M10 20l7 7 13-14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <h3>Transfer Successful!</h3>
       <div class="modal-amt">{{ fmt(amountNum) }}</div>
-      <p>Sent to Wallet #{{ targetWalletId }}</p>
+      <p>Sent to &#64;{{ targetUsername.trim() }}</p>
       <div class="modal-txn">Ref: {{ successTxId }}</div>
       <button class="btn-full" (click)="reset()">New Transfer</button>
       <a routerLink="/transactions" class="btn-outline-full">View Transactions</a>
