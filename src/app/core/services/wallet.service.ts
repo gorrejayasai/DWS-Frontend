@@ -10,7 +10,7 @@ export interface TopUpRequest {
   currency: string;
 }
 export interface TransferRequest {
-  targetUsername: string;
+  targetWalletId: number;
   amount: number;
   currency: string;
 }
