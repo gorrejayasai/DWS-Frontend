@@ -162,7 +162,7 @@ export class KycComponent implements OnInit {
 
   logout(): void { this.auth.logout(); }
 
-  fmtDate(d: string): string {
+  fmtDate(d: string | null | undefined): string {
     if (!d) return '—';
     return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }

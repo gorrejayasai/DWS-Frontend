@@ -28,4 +28,8 @@ export class KycService {
     fd.append('file', file, file.name);
     return this.http.put<KycResponse>(`${this.BASE}/kyc/user/update`, fd);
   }
+
+  viewDocument(docId: number): Observable<Blob> {
+    return this.http.get(`${this.BASE}/kyc/document/${docId}`, { responseType: 'blob' });
+  }
 }

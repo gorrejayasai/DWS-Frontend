@@ -97,6 +97,11 @@ tr:hover td{background:#FAFAFE}
 .btn-approve:hover{background:#10B981;color:#fff}
 .btn-reject{padding:5px 14px;border-radius:8px;border:none;background:rgba(239,68,68,.08);color:#EF4444;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .18s;font-family:inherit}
 .btn-reject:hover{background:#EF4444;color:#fff}
+.doc-btns{display:flex;flex-wrap:wrap;gap:6px}
+.btn-doc{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;border:1.5px solid rgba(108,99,255,.25);background:rgba(108,99,255,.06);color:#6C63FF;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .18s;font-family:inherit;white-space:nowrap}
+.btn-doc svg{stroke:currentColor;flex-shrink:0}
+.btn-doc:hover:not(:disabled){background:#6C63FF;color:#fff;border-color:#6C63FF}
+.btn-doc:disabled{opacity:.5;cursor:not-allowed}
 .empty-row{padding:32px;text-align:center;color:#9C94C0;font-size:.875rem}
 
 /* REFRESH ROW */

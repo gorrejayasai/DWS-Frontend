@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { AdminService } from '../../../core/services/admin.service';
+import { KycService } from '../../../core/services/kyc.service';
 import { KycResponse } from '../../../core/models/kyc.model';
 
 @Component({
@@ -16,6 +17,7 @@ import { KycResponse } from '../../../core/models/kyc.model';
 export class AdminKycComponent implements OnInit {
   private auth = inject(AuthService);
   private adminSvc = inject(AdminService);
+  private kycSvc = inject(KycService);
 
   username = '';
   get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'A'; }
@@ -35,6 +37,8 @@ export class AdminKycComponent implements OnInit {
   showRejectModal = false;
   rejectUserId = 0;
   rejectRemarks = '';
+
+  docLoading: number | null = null;
 
   ngOnInit(): void {
     const user = this.auth.getUser();
@@ -123,10 +127,27 @@ export class AdminKycComponent implements OnInit {
     this.rejectRemarks = '';
   }
 
+  openDocument(docId: number): void {
+    this.docLoading = docId;
+    this.kycSvc.viewDocument(docId).subscribe({
+      next: blob => {
+        this.docLoading = null;
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      },
+      error: () => {
+        this.docLoading = null;
+        this.actionError = 'Failed to load document. Please try again.';
+        setTimeout(() => this.actionError = '', 4000);
+      }
+    });
+  }
+
   toggleSidebar(): void { this.sidebarExpanded = !this.sidebarExpanded; }
   logout(): void { this.auth.logout(); }
 
-  fmtDate(d: string): string {
+  fmtDate(d: string | null | undefined): string {
     if (!d) return '—';
     return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
