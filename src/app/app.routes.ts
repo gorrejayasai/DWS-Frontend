@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
+import { kycGuard } from './core/guards/kyc.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -38,17 +39,17 @@ export const routes: Routes = [
   {
     path: 'topup',
     loadComponent: () => import('./pages/topup/topup').then(m => m.TopupComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, kycGuard]
   },
   {
     path: 'transfer',
     loadComponent: () => import('./pages/transfer/transfer').then(m => m.TransferComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, kycGuard]
   },
   {
     path: 'withdraw',
     loadComponent: () => import('./pages/withdraw/withdraw').then(m => m.WithdrawComponent),
-    canActivate: [authGuard]
+    canActivate: [authGuard, kycGuard]
   },
   {
     path: 'kyc',
@@ -90,6 +91,11 @@ export const routes: Routes = [
   {
     path: 'admin/transactions',
     loadComponent: () => import('./pages/admin/transactions/admin-transactions').then(m => m.AdminTransactionsComponent),
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/wallets',
+    loadComponent: () => import('./pages/admin/wallets/admin-wallets').then(m => m.AdminWalletsComponent),
     canActivate: [adminGuard]
   },
   {

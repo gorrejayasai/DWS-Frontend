@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { KycService } from '../../../core/services/kyc.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,8 +10,11 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
-export class SidebarComponent {
-  private auth = inject(AuthService);
+export class SidebarComponent implements OnInit {
+  private auth   = inject(AuthService);
+  private kycSvc = inject(KycService);
+
+  kycApproved = false;
 
   get username(): string {
     return this.auth.getUser()?.username ?? 'User';
@@ -20,6 +24,16 @@ export class SidebarComponent {
   }
   get initials(): string {
     return this.username.slice(0, 2).toUpperCase() || 'U';
+  }
+
+  ngOnInit(): void {
+    const user = this.auth.getUser();
+    if (user?.userId) {
+      this.kycSvc.getKycByUserId(user.userId).subscribe({
+        next: (kyc) => { this.kycApproved = kyc.status === 'APPROVED'; },
+        error: ()    => { this.kycApproved = false; }
+      });
+    }
   }
 
   showLogoutModal = false;

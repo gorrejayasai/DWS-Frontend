@@ -52,4 +52,9 @@ export class WalletService {
   unfreezeWallet(walletId: number): Observable<WalletResponse> {
     return this.http.put<WalletResponse>(`${this.BASE}/wallets/${walletId}/unfreeze`, {});
   }
+
+  // Backend: PUT /wallets/{walletId}/close
+  closeWallet(walletId: number): Observable<WalletResponse> {
+    return this.http.put<WalletResponse>(`${this.BASE}/wallets/${walletId}/close`, {});
+  }
 }

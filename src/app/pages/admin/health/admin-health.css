@@ -35,10 +35,10 @@ a{text-decoration:none;color:inherit}
 .sidebar.expanded .sb-user-info{max-width:200px;opacity:1}
 .sb-user-name{font-size:.8rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sb-user-role{font-size:.7rem;color:rgba(255,255,255,.4)}
-.sb-logout{max-width:0;overflow:hidden;height:28px;display:grid;place-items:center;border-radius:8px;cursor:pointer;transition:max-width .28s,opacity .15s,background .2s;opacity:0;pointer-events:none;flex-shrink:0}
-.sidebar.expanded .sb-logout{max-width:28px;opacity:1;pointer-events:auto}
+.sb-logout{width:28px;height:28px;display:grid;place-items:center;border-radius:8px;cursor:pointer;transition:background .2s;flex-shrink:0;opacity:1;pointer-events:auto}
+.sidebar:not(.expanded) .sb-avatar{display:none}
 .sb-logout:hover{background:rgba(239,68,68,.2)}
-.sb-logout svg{width:15px;height:15px;stroke:rgba(255,255,255,.5);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sb-logout svg{width:15px;height:15px;stroke:rgba(255,255,255,.7);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* HAMBURGER */
 .hamburger{width:36px;height:36px;display:grid;place-items:center;border-radius:8px;border:1.5px solid #E5E7EB;background:#fff;cursor:pointer;transition:all .2s;flex-shrink:0}

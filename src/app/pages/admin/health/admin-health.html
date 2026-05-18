@@ -22,6 +22,10 @@
         <svg class="sb-icon" viewBox="0 0 18 18"><path d="M9 1L16 4V8C16 12.4 12.9 16.3 9 18C5.1 16.3 2 12.4 2 8V4L9 1Z" stroke-width="1.6" stroke-linejoin="round"/></svg>
         <span class="sb-label">KYC</span>
       </a>
+      <a routerLink="/admin/wallets" class="sb-item">
+        <svg class="sb-icon" viewBox="0 0 18 18"><rect x="1" y="4" width="16" height="12" rx="2.5" stroke-width="1.6"/><path d="M1 8h16M12 12h2" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sb-label">Wallets</span>
+      </a>
       <a routerLink="/admin/transactions" class="sb-item">
         <svg class="sb-icon" viewBox="0 0 18 18"><path d="M3 5h12M3 9h8M3 13h5" stroke-width="1.6" stroke-linecap="round"/></svg>
         <span class="sb-label">Transactions</span>
@@ -116,7 +120,7 @@
         }
         <div class="sum-pill sum-internal">
           <span class="dot dot-internal"></span>
-          2 Internal (not polled)
+          2 Internal
         </div>
       </div>
 
@@ -131,6 +135,8 @@
                   <span class="mini-spinner"></span> Checking
                 </span>
               } @else if (svc.status === 'UP') {
+                <span class="svc-badge badge-up">UP</span>
+              } @else if (svc.status === 'UP_INFERRED') {
                 <span class="svc-badge badge-up">UP</span>
               } @else if (svc.status === 'DOWN') {
                 <span class="svc-badge badge-down">DOWN</span>
@@ -148,6 +154,11 @@
                   <span class="status-dot dot-up"></span>
                   <span class="status-text text-up">Operational</span>
                   <span class="latency-badge" [class]="latencyClass(svc.latency)">{{ latencyLabel(svc.latency) }}</span>
+                </div>
+              } @else if (svc.status === 'UP_INFERRED') {
+                <div class="svc-latency-row">
+                  <span class="status-dot dot-up"></span>
+                  <span class="status-text text-up">Running (inferred)</span>
                 </div>
               } @else if (svc.status === 'DOWN') {
                 <div class="svc-latency-row">
@@ -180,7 +191,7 @@
         <div class="legend-items">
           <div class="legend-item"><span class="dot dot-up"></span><span>UP — service returned any HTTP response (200, 401, 403 etc.) within 6 s</span></div>
           <div class="legend-item"><span class="dot dot-down"></span><span>DOWN — network error, connection refused, or timeout after 6 s</span></div>
-          <div class="legend-item"><span class="dot dot-internal"></span><span>INTERNAL — not reachable through API Gateway (Eureka, Notification)</span></div>
+          <div class="legend-item"><span class="dot dot-internal"></span><span>INTERNAL — not reachable through API Gateway; status inferred from dependent services (Eureka → any service UP; Notification → Wallet Service UP)</span></div>
         </div>
       </div>
 

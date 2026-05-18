@@ -6,7 +6,7 @@ import { catchError, of, timeout } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { environment } from '../../../../environments/environment';
 
-export type SvcStatus = 'CHECKING' | 'UP' | 'DOWN' | 'INTERNAL';
+export type SvcStatus = 'CHECKING' | 'UP' | 'UP_INFERRED' | 'DOWN' | 'INTERNAL';
 
 export interface ServiceInfo {
   name: string;
@@ -183,9 +183,29 @@ export class AdminHealthComponent implements OnInit, OnDestroy {
         if (pending <= 0) {
           this.checking = false;
           this.lastFullCheck = new Date();
+          this.inferInternalServices();
         }
       });
     });
+  }
+
+  // ── Infer status of internal services ────────────────────────────────────
+
+  private inferInternalServices(): void {
+    const anyUp    = this.checkableServices.some(s => s.status === 'UP');
+    const walletUp = this.services.find(s => s.name === 'Wallet Service')?.status === 'UP';
+
+    const eureka   = this.services.find(s => s.name === 'Eureka Server');
+    const notif    = this.services.find(s => s.name === 'Notification Service');
+
+    if (eureka && anyUp) {
+      eureka.status      = 'UP_INFERRED';
+      eureka.lastChecked = new Date();
+    }
+    if (notif && walletUp) {
+      notif.status      = 'UP_INFERRED';
+      notif.lastChecked = new Date();
+    }
   }
 
   // ── Auto-refresh countdown ───────────────────────────────────────────────────
