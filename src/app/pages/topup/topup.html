@@ -107,8 +107,25 @@
 <!-- SUCCESS MODAL -->
 @if (showSuccess) {
   <div class="modal-overlay">
+    <!-- Confetti noodles -->
+    <div class="confetti-wrap">
+      <div class="confetti-piece"></div><div class="confetti-piece"></div>
+      <div class="confetti-piece"></div><div class="confetti-piece"></div>
+      <div class="confetti-piece"></div><div class="confetti-piece"></div>
+      <div class="confetti-piece"></div><div class="confetti-piece"></div>
+      <div class="confetti-piece"></div><div class="confetti-piece"></div>
+      <div class="confetti-piece"></div><div class="confetti-piece"></div>
+    </div>
     <div class="modal">
-      <div class="modal-icon">
+      <!-- Shield icon (Firpai style) -->
+      <div class="modal-shield">
+        <svg class="shield-svg" viewBox="0 0 52 52" fill="none">
+          <path d="M26 4L8 11v14c0 10.5 7.7 20.3 18 22.7C36.3 45.3 44 35.5 44 25V11L26 4Z" fill="url(#sg)" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+          <path d="M17 26l6 6 12-12" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="sg" x1="8" y1="4" x2="44" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#C5F135"/><stop offset="1" stop-color="#00E5A0"/></linearGradient></defs>
+        </svg>
+      </div>
+      <div class="modal-icon" style="display:none">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
           <path
             d="M10 20l7 7 13-14"

@@ -1,11 +1,11 @@
 .topbar {
   height: var(--nav-h);
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
+  background: rgba(18,17,26,.85);
+  border-bottom: 1px solid rgba(255,255,255,.06);
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 32px;
   position: sticky; top: 0; z-index: 50;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(16px);
 }
 .topbar-left h1 { font-size: 1.125rem; font-weight: 800; color: var(--text); }
 .topbar-left p  { font-size: .8125rem; color: var(--text-3); }
@@ -13,41 +13,42 @@
 
 .topbar-av {
   width: 38px; height: 38px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand), var(--brand-mid));
+  background: linear-gradient(135deg, #7B6CF6, #9B8AFB);
   display: flex; align-items: center; justify-content: center;
   font-size: .8rem; font-weight: 700; color: #fff;
   cursor: pointer; text-decoration: none;
-  transition: transform .2s;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 0 12px rgba(123,108,246,.3);
 }
-.topbar-av:hover { transform: scale(1.05); }
+.topbar-av:hover { transform: scale(1.08); box-shadow: 0 0 20px rgba(123,108,246,.5); }
 
-/* ── Notification bell ─────────────────────────────────────────── */
+/* ── Notification bell ─────────────────────────────────── */
 .notif-wrap { position: relative; }
 
 .notif-btn {
   width: 38px; height: 38px; border-radius: 10px;
-  background: var(--page);
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.07);
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: var(--text-2);
-  transition: background .15s, color .15s, border-color .15s;
+  cursor: pointer; color: rgba(255,255,255,.5);
+  transition: all .2s;
 }
 .notif-btn:hover,
 .notif-btn.open {
-  background: rgba(108,99,255,.08);
+  background: rgba(123,108,246,.15);
   color: var(--brand);
-  border-color: var(--brand);
+  border-color: rgba(123,108,246,.3);
 }
 
-/* ── Floating panel ────────────────────────────────────────────── */
+/* ── Floating panel ────────────────────────────────────── */
 .notif-panel {
   position: absolute;
   top: calc(100% + 10px); right: 0;
   width: 360px;
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: #1E1D2B;
+  border: 1px solid rgba(255,255,255,.08);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+  box-shadow: 0 16px 48px rgba(0,0,0,.6);
   z-index: 200;
   overflow: hidden;
 }
@@ -55,10 +56,10 @@
 .np-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,.07);
 }
-.np-header h4 { font-size: .9rem; font-weight: 700; color: var(--text); margin: 0; }
-.np-view-all  { font-size: .8rem; font-weight: 600; color: var(--brand); text-decoration: none; }
+.np-header h4 { font-size: .9rem; font-weight: 700; color: #fff; margin: 0; }
+.np-view-all  { font-size: .8rem; font-weight: 600; color: var(--cta); text-decoration: none; }
 .np-view-all:hover { text-decoration: underline; }
 
 .np-list { max-height: 340px; overflow-y: auto; }
@@ -66,11 +67,11 @@
 .np-item {
   display: flex; align-items: flex-start; gap: 12px;
   padding: 13px 20px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,.05);
   transition: background .12s;
 }
 .np-item:last-child { border-bottom: none; }
-.np-item:hover { background: rgba(108,99,255,.04); }
+.np-item:hover { background: rgba(255,255,255,.03); }
 
 .np-icon {
   width: 34px; height: 34px; border-radius: 9px;
@@ -78,26 +79,26 @@
   flex-shrink: 0;
 }
 .np-body  { flex: 1; min-width: 0; }
-.np-title { font-size: .8125rem; font-weight: 600; color: var(--text); margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.np-desc  { font-size: .75rem; color: var(--text-2); margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.np-time  { font-size: .6875rem; color: var(--text-3); }
+.np-title { font-size: .8125rem; font-weight: 600; color: #fff; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.np-desc  { font-size: .75rem; color: rgba(255,255,255,.45); margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.np-time  { font-size: .6875rem; color: rgba(255,255,255,.25); }
 
 .np-footer {
   padding: 13px 20px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255,255,255,.07);
   text-align: center;
 }
-.np-footer a { font-size: .8125rem; font-weight: 600; color: var(--brand); text-decoration: none; }
+.np-footer a { font-size: .8125rem; font-weight: 600; color: var(--cta); text-decoration: none; }
 .np-footer a:hover { text-decoration: underline; }
 
 .np-state {
   display: flex; flex-direction: column; align-items: center;
   gap: 10px; padding: 32px 20px;
-  color: var(--text-3); font-size: .8125rem;
+  color: rgba(255,255,255,.3); font-size: .8125rem;
 }
 .np-spinner {
   width: 20px; height: 20px;
-  border: 2px solid var(--border);
+  border: 2px solid rgba(255,255,255,.1);
   border-top-color: var(--brand);
   border-radius: 50%;
   animation: np-spin .7s linear infinite;
