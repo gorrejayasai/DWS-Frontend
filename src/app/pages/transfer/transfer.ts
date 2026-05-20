@@ -42,10 +42,17 @@ export class TransferComponent implements OnInit {
 
   quickAmounts = [500, 1000, 5000, 10000, 25000];
 
+  recentContacts: string[] = [];
+
+  private get contactsKey(): string {
+    return `recent_contacts_${this.auth.getUser()?.userId}`;
+  }
+
   ngOnInit(): void {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'User';
     this.email = user?.email ?? '';
+    this.loadRecentContacts();
     this.walletSvc.getMyWallet().subscribe({
       next: (w) => {
         this.walletId = w.id;
@@ -109,12 +116,13 @@ export class TransferComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
+          this.saveRecentContact(this.targetUsername.trim());
           this.loading = false;
           this.successTxId = res?.transactionId ?? '';
           this.showSuccess = true;
           this.walletSvc
             .getMyWallet()
-            .subscribe({ next: (w) => (this.balance = w.availableBalance), error: () => {} });
+            .subscribe({ next: (w) => (this.balance = w.availableBalance), error: () => { } });
         },
         error: (err) => {
           this.loading = false;
@@ -140,5 +148,20 @@ export class TransferComponent implements OnInit {
 
   fmt(n: number): string {
     return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  pickContact(username: string): void {
+    this.targetUsername = username;
+    this.errorMsg = '';
+  }
+
+  private loadRecentContacts(): void {
+    this.recentContacts = JSON.parse(localStorage.getItem(this.contactsKey) ?? '[]');
+  }
+
+  private saveRecentContact(username: string): void {
+    const updated = [username, ...this.recentContacts.filter(u => u !== username)].slice(0, 5);
+    localStorage.setItem(this.contactsKey, JSON.stringify(updated));
+    this.recentContacts = updated;
   }
 }

@@ -12,7 +12,7 @@
           <p class="card-sub">Enter the recipient's username and amount.</p>
 
           @if (errorMsg) {
-            <div class="error-box">{{ errorMsg }}</div>
+          <div class="error-box">{{ errorMsg }}</div>
           }
 
           <!-- Balance -->
@@ -25,12 +25,21 @@
           <div class="form-group">
             <label class="form-label">Recipient Username</label>
             <input type="text" class="form-input" [(ngModel)]="targetUsername" (ngModelChange)="errorMsg=''"
-              placeholder="Enter PayVault username"
-              [class.input-err]="selfTransfer" />
+              placeholder="Enter PayVault username" [class.input-err]="selfTransfer" />
             @if (selfTransfer) {
-              <div class="amt-hint err">Cannot transfer to yourself</div>
+            <div class="amt-hint err">Cannot transfer to yourself</div>
             } @else {
-              <div class="field-hint">Enter the recipient's PayVault username</div>
+            <div class="field-hint">Enter the recipient's PayVault username</div>
+            }
+            @if (recentContacts.length > 0) {
+            <div class="recent-contacts">
+              <span class="rc-label">Recent</span>
+              @for (contact of recentContacts; track contact) {
+              <button type="button" class="rc-chip" (click)="pickContact(contact)">
+                &#64;{{ contact }}
+              </button>
+              }
+            </div>
             }
           </div>
 
@@ -39,50 +48,47 @@
             <label class="form-label">Amount</label>
             <div class="amount-wrap">
               <span class="amount-prefix">₹</span>
-              <input
-                type="number"
-                class="amount-input"
-                [(ngModel)]="amount"
-                (ngModelChange)="onAmountChange()"
-                placeholder="0.00"
-                min="1"
-                max="100000"
-                [class.error]="amtHint.cls === 'err'"
-              />
+              <input type="number" class="amount-input" [(ngModel)]="amount" (ngModelChange)="onAmountChange()"
+                placeholder="0.00" min="1" max="100000" [class.error]="amtHint.cls === 'err'" />
               <span class="amount-suffix">INR</span>
             </div>
             @if (amtHint.text) {
-              <div class="amt-hint" [class]="amtHint.cls">{{ amtHint.text }}</div>
+            <div class="amt-hint" [class]="amtHint.cls">{{ amtHint.text }}</div>
             }
           </div>
 
           <!-- Quick amounts -->
           <div class="quick-amounts">
             @for (qa of quickAmounts; track qa) {
-              <button class="qa" [class.sel]="selectedQuick === qa" (click)="selectQuick(qa)">
-                ₹{{ qa.toLocaleString('en-IN') }}
-              </button>
+            <button class="qa" [class.sel]="selectedQuick === qa" (click)="selectQuick(qa)">
+              ₹{{ qa.toLocaleString('en-IN') }}
+            </button>
             }
           </div>
 
           <!-- Summary -->
           @if (targetUsername.trim() && amountNum > 0) {
-            <div class="summary-card">
-              <div class="sum-head"><h4>Transfer Summary</h4></div>
-              <div class="sum-rows">
-                <div class="sum-row"><span class="sum-key">To</span><span class="sum-val">&#64;{{ targetUsername.trim() }}</span></div>
-                <div class="sum-row"><span class="sum-key">Amount</span><span class="sum-val">{{ fmt(amountNum) }}</span></div>
-                <div class="sum-row sum-total"><span class="sum-key">Total Deducted</span><span class="sum-val">{{ fmt(amountNum) }}</span></div>
-              </div>
+          <div class="summary-card">
+            <div class="sum-head">
+              <h4>Transfer Summary</h4>
             </div>
+            <div class="sum-rows">
+              <div class="sum-row"><span class="sum-key">To</span><span class="sum-val">&#64;{{ targetUsername.trim()
+                  }}</span></div>
+              <div class="sum-row"><span class="sum-key">Amount</span><span class="sum-val">{{ fmt(amountNum) }}</span>
+              </div>
+              <div class="sum-row sum-total"><span class="sum-key">Total Deducted</span><span class="sum-val">{{
+                  fmt(amountNum) }}</span></div>
+            </div>
+          </div>
           }
 
           <button class="btn-full" [disabled]="!canSubmit" (click)="onSubmit()">
             @if (loading) {
-              <div class="btn-spinner"></div>
-              Processing…
+            <div class="btn-spinner"></div>
+            Processing…
             } @else {
-              Transfer ₹{{ amountNum > 0 ? amountNum.toLocaleString('en-IN') : '0' }}
+            Transfer ₹{{ amountNum > 0 ? amountNum.toLocaleString('en-IN') : '0' }}
             }
           </button>
           <p class="limit-note">Maximum ₹1,00,000 per transaction · Instant transfer</p>
@@ -127,15 +133,17 @@
 
 <!-- SUCCESS MODAL -->
 @if (showSuccess) {
-  <div class="modal-overlay">
-    <div class="modal">
-      <div class="modal-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M10 20l7 7 13-14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>Transfer Successful!</h3>
-      <div class="modal-amt">{{ fmt(amountNum) }}</div>
-      <p>Sent to &#64;{{ targetUsername.trim() }}</p>
-      <div class="modal-txn">Ref: {{ successTxId }}</div>
-      <button class="btn-full" (click)="reset()">New Transfer</button>
-      <a routerLink="/transactions" class="btn-outline-full">View Transactions</a>
-    </div>
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <path d="M10 20l7 7 13-14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg></div>
+    <h3>Transfer Successful!</h3>
+    <div class="modal-amt">{{ fmt(amountNum) }}</div>
+    <p>Sent to &#64;{{ targetUsername.trim() }}</p>
+    <div class="modal-txn">Ref: {{ successTxId }}</div>
+    <button class="btn-full" (click)="reset()">New Transfer</button>
+    <a routerLink="/transactions" class="btn-outline-full">View Transactions</a>
   </div>
+</div>
 }

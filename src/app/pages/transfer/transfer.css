@@ -84,3 +84,7 @@ a{text-decoration:none;color:inherit}
 .modal-txn{font-size:.8125rem;color:#9C94C0;margin-bottom:28px;font-family:'Inter',sans-serif}
 .btn-outline-full{display:block;width:100%;padding:14px;border-radius:50px;background:transparent;color:#6C63FF;font-family:inherit;font-size:1rem;font-weight:700;border:2px solid rgba(108,99,255,.25);cursor:pointer;transition:all .2s;margin-top:10px;text-align:center}
 .btn-outline-full:hover{border-color:#6C63FF;background:rgba(108,99,255,.05)}
+.recent-contacts{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.rc-label{font-size:.72rem;font-weight:700;color:#9C94C0;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;flex-shrink:0}
+.rc-chip{padding:5px 13px;border-radius:50px;background:#F7F5FF;border:1.5px solid rgba(108,99,255,.15);font-size:.8125rem;font-weight:600;color:#5C5480;cursor:pointer;font-family:inherit;transition:all .2s}
+.rc-chip:hover{background:rgba(108,99,255,.08);border-color:#6C63FF;color:#6C63FF}
