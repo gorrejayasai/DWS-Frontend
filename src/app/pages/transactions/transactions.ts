@@ -198,8 +198,6 @@ export class TransactionsComponent implements OnInit {
   }
 
   txSign(tx: TransactionResponse): string {
-    console.log(tx.targetUserId);
-    console.log(this.currentUserId);
     if (tx.type === 'TOPUP') return '+';
     if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return '+';
     return '-';

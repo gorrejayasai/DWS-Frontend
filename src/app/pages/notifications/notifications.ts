@@ -1,29 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
-import { TransactionService } from '../../core/services/transaction.service';
-import { KycService } from '../../core/services/kyc.service';
-import { TransactionResponse } from '../../core/models/transaction.model';
-import { KycResponse } from '../../core/models/kyc.model';
+import { NotificationService } from '../../core/services/notification.service';
+import { NotifItem } from '../../core/models/notification.model';
 import { SidebarComponent } from '../../shared/components/sidebar/sidebar';
 import { TopbarComponent } from '../../shared/components/topbar/topbar';
-import { NotificationService } from '../../core/services/notification.service';
-
-export interface NotifItem {
-  id: number;
-  iconBg: string;
-  iconColor: string;
-  iconType: 'up' | 'down' | 'transfer' | 'info' | 'shield';
-  title: string;
-  desc: string;
-  time: string;
-  amt?: string;
-  amtClass?: string;
-  group: string;
-}
 
 @Component({
   selector: 'app-notifications',

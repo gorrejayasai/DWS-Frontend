@@ -86,7 +86,7 @@ export class AdminHealthComponent implements OnInit, OnDestroy {
       status: 'CHECKING',
       latency: null,
       lastChecked: null,
-      checkUrl: `${environment.apiUrl}/transactions/me?page=0&size=1`
+      checkUrl: `${environment.apiUrl}/transactions/users/me?page=0&size=1`
     },
     {
       name: 'Notification Service',

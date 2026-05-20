@@ -6,7 +6,8 @@ import { environment } from '../../../environments/environment';
 import {
   LoginRequest, LoginResponse,
   SignupRequest, SignupResponse,
-  UserProfile, UpdateProfileRequest
+  UserProfile, UpdateProfileRequest,
+  RefreshTokenResponse
 } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
@@ -56,11 +57,11 @@ export class AuthService {
     if (navigate) this.router.navigate(['/login']);
   }
 
-  refreshToken(): Observable<LoginResponse> {
+  refreshToken(): Observable<RefreshTokenResponse> {
     const refresh = localStorage.getItem(this.REFRESH_KEY) ?? '';
-    return this.http.post<LoginResponse>(`${this.BASE}/user/auth/refresh-token`, { refreshToken: refresh }).pipe(
+    return this.http.post<RefreshTokenResponse>(`${this.BASE}/user/auth/refresh-token`, { refreshToken: refresh }).pipe(
       tap(res => {
-        localStorage.setItem(this.TOKEN_KEY, res.jwt);
+        localStorage.setItem(this.TOKEN_KEY, res.accessToken);  // backend field is accessToken, not jwt
         localStorage.setItem(this.REFRESH_KEY, res.refreshToken);
       })
     );

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { AdminService } from '../../../core/services/admin.service';
-import { TransactionService } from '../../../core/services/transaction.service';
 
 @Component({
   selector: 'app-admin-transactions',
@@ -16,7 +15,6 @@ import { TransactionService } from '../../../core/services/transaction.service';
 export class AdminTransactionsComponent implements OnInit {
   private auth     = inject(AuthService);
   private adminSvc = inject(AdminService);
-  private txSvc    = inject(TransactionService);
 
   username = '';
   get initials(): string { return this.username.slice(0, 2).toUpperCase() || 'A'; }

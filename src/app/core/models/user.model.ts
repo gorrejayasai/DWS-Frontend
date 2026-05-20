@@ -44,3 +44,11 @@ export interface JwtValidationResponse {
   role: string;
   valid: boolean;
 }
+
+/** Matches backend RefreshTokenResponseDto — uses accessToken, NOT jwt */
+export interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt?: string;
+  refreshTokenExpiresAt?: string;
+}
