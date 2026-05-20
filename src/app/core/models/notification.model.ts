@@ -31,4 +31,6 @@ export interface NotifItem {
   desc: string;
   time: string;
   group: string;
+  amt?: string;
+  amtClass?: string;
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { NotifItem } from '../../core/models/notification.model';
@@ -10,7 +9,7 @@ import { TopbarComponent } from '../../shared/components/topbar/topbar';
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule, RouterLink, SidebarComponent, TopbarComponent],
+  imports: [CommonModule, SidebarComponent, TopbarComponent],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })
