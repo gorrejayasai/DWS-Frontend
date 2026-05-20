@@ -178,8 +178,8 @@ export class TransactionsComponent implements OnInit {
     if (tx.type === 'TOPUP') return 'Wallet Top Up';
     if (tx.type === 'WITHDRAW') return 'Withdrawal';
     if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId)
-      return `Transfer from Wallet #${tx.walletId}`;
-    return tx.targetWalletId ? `Transfer → #${tx.targetWalletId}` : 'Transfer';
+      return `Transfer from ${tx.username ? '@' + tx.username : 'Wallet #' + tx.walletId}`;
+    return `Transfer to ${tx.targetUsername ? '@' + tx.targetUsername : tx.targetWalletId ? 'Wallet #' + tx.targetWalletId : '—'}`;
   }
 
   txIconBg(tx: TransactionResponse): string {

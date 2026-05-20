@@ -102,6 +102,7 @@ export class TransferComponent implements OnInit {
 
     this.walletSvc
       .transfer(this.walletId, {
+        username: this.auth.getUsername()!,
         targetUsername: this.targetUsername.trim(),
         amount: this.amountNum,
         currency: 'INR',

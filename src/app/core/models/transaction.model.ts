@@ -5,6 +5,8 @@ export interface TransactionResponse {
   targetWalletId: number | null;
   targetUserId: number | null;
   userId: number;
+  username: string | null;
+  targetUsername: string | null;
   type: 'TOPUP' | 'WITHDRAW' | 'TRANSFER';
   amount: number;
   currency: string;

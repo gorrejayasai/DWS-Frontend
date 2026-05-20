@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -112,6 +112,12 @@ export class AuthService {
   getUser(): any {
     return this.getStoredUser();
   }
+
+  
+getUsername(): string | null {
+  return this.getStoredUser()?.username ?? null;
+}
+
 
   private clearSession(): void {
     localStorage.removeItem(this.TOKEN_KEY);
