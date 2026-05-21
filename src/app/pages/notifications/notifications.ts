@@ -1,13 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
-import { TransactionService } from '../../core/services/transaction.service';
 import { KycService } from '../../core/services/kyc.service';
-import { TransactionResponse } from '../../core/models/transaction.model';
-import { KycResponse } from '../../core/models/kyc.model';
 import { SidebarComponent } from '../../shared/components/sidebar/sidebar';
 import { TopbarComponent } from '../../shared/components/topbar/topbar';
 import { NotificationService } from '../../core/services/notification.service';
@@ -28,7 +22,7 @@ export interface NotifItem {
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule, RouterLink, SidebarComponent, TopbarComponent],
+  imports: [CommonModule, SidebarComponent, TopbarComponent],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })

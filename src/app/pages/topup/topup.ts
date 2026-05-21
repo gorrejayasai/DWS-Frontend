@@ -37,6 +37,18 @@ export class TopupComponent implements OnInit {
 
   quickAmounts = [500, 1000, 5000, 10000, 25000, 50000];
 
+  // Payment methods are UI-only — no real gateway is wired up yet.
+  // Selection is purely cosmetic so the user can pick a preferred channel.
+  paymentMethods = [
+    { id: 'netbanking', label: 'Net Banking', sublabel: 'Instant transfer',     badge: '',      badgeCls: '' },
+    { id: 'upi',        label: 'UPI',         sublabel: 'PhonePe, GPay, Paytm', badge: 'UPI',   badgeCls: 'badge-upi' },
+    { id: 'debit',      label: 'Debit Card',  sublabel: 'Visa / Mastercard',    badge: 'DEBIT', badgeCls: 'badge-debit' },
+    { id: 'neft',       label: 'NEFT / RTGS', sublabel: 'Bank transfer',        badge: 'NEFT',  badgeCls: 'badge-neft' }
+  ];
+  selectedMethod = 'netbanking';
+
+  selectMethod(id: string): void { this.selectedMethod = id; }
+
   ngOnInit(): void {
     const user = this.auth.getUser();
     this.username = user?.username ?? 'User';

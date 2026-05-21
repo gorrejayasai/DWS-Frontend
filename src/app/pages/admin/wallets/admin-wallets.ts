@@ -63,10 +63,10 @@ export class AdminWalletsComponent implements OnInit {
   get filteredWallets(): WalletResponse[] {
     return this.wallets.filter(w => {
       const statusMatch = this.filterStatus === 'ALL' || w.status === this.filterStatus;
-      const term        = this.searchTerm.toLowerCase();
+      const term        = this.searchTerm.trim().toLowerCase();
       const searchMatch = !term ||
-        String(w.id).includes(term) ||
-        String(w.userId).includes(term);
+        String(w.id) === term ||
+        String(w.userId) === term;
       return statusMatch && searchMatch;
     });
   }

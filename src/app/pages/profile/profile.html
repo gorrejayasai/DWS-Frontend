@@ -26,11 +26,6 @@
       </div>
     </div>
 
-    <!-- <app-topbar
-      title="Profile Settings"
-      subtitle="Manage your account information"
-    /> -->
-
     <div class="content">
       @if (loading) {
         <div class="loading-state">
@@ -104,21 +99,13 @@
               </div>
             }
             <div class="profile-stats">
-              <!-- <div class="ps">
-                <div class="ps-val">—</div>
-                <div class="ps-lbl">Transactions</div>
-              </div>
-              <div class="ps">
-                <div class="ps-val">—</div>
-                <div class="ps-lbl">Balance</div>
-              </div> -->
               <div class="ps">
                 <div class="ps-val">2026</div>
                 <div class="ps-lbl">Member since</div>
               </div>
               <div class="ps">
                 <div class="ps-val"
-                  [style.color]="walletStatus === 'ACTIVE' ? 'var(--success)' : walletStatus === 'FROZEN' ? 'var(--warning, #F59E0B)' : 'var(--danger)'">
+                  [style.color]="walletStatus === 'ACTIVE' ? 'var(--success)' : (walletStatus === 'FROZEN' || walletStatus === 'INACTIVE') ? 'var(--warning, #F59E0B)' : 'var(--danger)'">
                   {{ walletStatus }}
                 </div>
                 <div class="ps-lbl">Wallet Status</div>

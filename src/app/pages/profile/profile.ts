@@ -1,18 +1,17 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { KycService } from '../../core/services/kyc.service';
 import { WalletService } from '../../core/services/wallet.service';
 import { UserProfile } from '../../core/models/user.model';
 import { SidebarComponent } from "../../shared/components/sidebar/sidebar";
-import { TopbarComponent } from "../../shared/components/topbar/topbar";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
@@ -24,7 +23,9 @@ export class ProfileComponent implements OnInit {
 
   profile: UserProfile | null = null;
   kycStatus: 'PENDING' | 'APPROVED' | 'REJECTED' | 'NOT_SUBMITTED' = 'NOT_SUBMITTED';
-  walletStatus = 'ACTIVE';
+  // 'INACTIVE' is the pre-KYC default — no wallet has been provisioned yet.
+  // Once the wallet exists, this is overwritten with ACTIVE / FROZEN / CLOSED.
+  walletStatus = 'INACTIVE';
   loading = true;
   saving = false;
   saveSuccess = false;
@@ -75,10 +76,12 @@ export class ProfileComponent implements OnInit {
       });
     }
 
-    // Load wallet status (ACTIVE / FROZEN / CLOSED)
+    // Load wallet status (ACTIVE / FROZEN / CLOSED).
+    // If the call fails (typically because KYC isn't approved yet so no wallet
+    // exists), explicitly fall back to INACTIVE rather than showing a stale default.
     this.walletSvc.getMyWallet().subscribe({
-      next: (w) => { this.walletStatus = w.status ?? 'ACTIVE'; },
-      error: ()  => { /* wallet not created yet — keep default */ }
+      next: (w) => { this.walletStatus = w.status ?? 'INACTIVE'; },
+      error: ()  => { this.walletStatus = 'INACTIVE'; }
     });
   }
 
