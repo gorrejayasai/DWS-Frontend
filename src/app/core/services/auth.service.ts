@@ -1,10 +1,11 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   LoginRequest, LoginResponse,
+  RefreshResponse,
   SignupRequest, SignupResponse,
   UserProfile, UpdateProfileRequest
 } from '../models/user.model';
@@ -53,14 +54,24 @@ export class AuthService {
       });
     }
     this.clearSession();
-    if (navigate) this.router.navigate(['/login']);
+    if (navigate) {
+      // Land the user on /login, but seed browser history with /home first
+      // so the browser back arrow from /login (or from /signup reached via
+      // "Create a free account") returns to the public landing page rather
+      // than bouncing through guarded pages.
+      this.router.navigate(['/home'], { replaceUrl: true }).then(() => {
+        this.router.navigate(['/login']);
+      });
+    }
   }
 
-  refreshToken(): Observable<LoginResponse> {
+  refreshToken(): Observable<RefreshResponse> {
     const refresh = localStorage.getItem(this.REFRESH_KEY) ?? '';
-    return this.http.post<LoginResponse>(`${this.BASE}/user/auth/refresh-token`, { refreshToken: refresh }).pipe(
+    return this.http.post<RefreshResponse>(`${this.BASE}/user/auth/refresh-token`, { refreshToken: refresh }).pipe(
       tap(res => {
-        localStorage.setItem(this.TOKEN_KEY, res.jwt);
+        // Backend uses `accessToken` here (not `jwt` like LoginResponse) —
+        // see USER_SERVICE/RefreshTokenResponseDto.java.
+        localStorage.setItem(this.TOKEN_KEY, res.accessToken);
         localStorage.setItem(this.REFRESH_KEY, res.refreshToken);
       })
     );

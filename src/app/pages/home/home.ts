@@ -65,6 +65,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.io?.disconnect();
   }
 
+  // Smooth-scroll to a section by id. preventDefault stops the browser from
+  // appending the fragment to the URL and triggering Angular's router, which
+  // was causing the page to refresh instead of scrolling.
+  scrollToSection(event: Event, id: string): void {
+    event.preventDefault();
+    const target = document.getElementById(id);
+    if (!target) return;
+    const navHeight = (document.querySelector('.navbar') as HTMLElement)?.offsetHeight ?? 0;
+    const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+
   // ─── Navbar scroll shadow ────────────────────────────────────────────────────
   private setupScroll(): void {
     let raf: number | null = null;

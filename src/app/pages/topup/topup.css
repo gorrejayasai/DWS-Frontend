@@ -59,6 +59,26 @@ a{text-decoration:none;color:inherit}
 .qa{padding:9px 18px;border-radius:50px;background:#F7F5FF;border:1.5px solid rgba(108,99,255,.15);font-size:.8125rem;font-weight:700;color:#5C5480;cursor:pointer;font-family:inherit;transition:all .2s}
 .qa:hover,.qa.sel{background:rgba(108,99,255,.08);border-color:#6C63FF;color:#6C63FF}
 
+/* PAYMENT METHOD (UI-only; no real gateway integration yet) */
+.pm-section{margin:24px 0 20px}
+.pm-title{margin-bottom:12px}
+.pm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pm-card{position:relative;text-align:left;padding:16px;border-radius:14px;border:1.5px solid rgba(108,99,255,.14);background:#fff;cursor:pointer;font-family:inherit;color:#1A1340;transition:border-color .2s,background .2s,box-shadow .2s;display:flex;flex-direction:column;gap:6px;min-height:88px}
+.pm-card:hover{border-color:rgba(108,99,255,.32);background:rgba(108,99,255,.02)}
+.pm-card.pm-selected{border-color:#6C63FF;background:rgba(108,99,255,.04);box-shadow:0 0 0 1px #6C63FF inset}
+.pm-top{display:flex;align-items:center;justify-content:space-between;min-height:24px}
+.pm-label{font-size:.95rem;font-weight:700}
+.pm-sub{font-size:.75rem;color:#9C94C0}
+.pm-check{width:20px;height:20px;border-radius:50%;background:#6C63FF;display:grid;place-items:center;flex-shrink:0}
+.pm-badge{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.05em;padding:3px 8px;border-radius:6px}
+.badge-upi{background:rgba(16,185,129,.12);color:#10B981}
+.badge-debit{background:rgba(245,158,11,.14);color:#D97706}
+.badge-neft{background:rgba(139,92,246,.14);color:#8B5CF6}
+.pm-icon-card{position:relative;width:30px;height:20px;border-radius:4px;background:#1A1340;display:inline-block}
+.pm-dot{position:absolute;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%}
+.pm-dot-1{left:5px;background:#F59E0B}
+.pm-dot-2{left:13px;background:#EF4444;opacity:.85}
+
 /* BTN */
 .btn-full{width:100%;padding:16px;border-radius:50px;background:linear-gradient(135deg,#6C63FF,#8B5CF6);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;border:none;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(108,99,255,.3);display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-full:hover:not([disabled]){transform:translateY(-2px);box-shadow:0 12px 32px rgba(108,99,255,.42)}

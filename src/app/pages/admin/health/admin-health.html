@@ -73,7 +73,7 @@
           {{ checking ? 'Checking…' : 'Check Now' }}
         </button>
         <span class="admin-badge">ADMIN</span>
-        <div class="topbar-av">{{ initials }}</div>
+        <button type="button" class="topbar-av" (click)="logout()" title="Logout">{{ initials }}</button>
       </div>
     </div>
 

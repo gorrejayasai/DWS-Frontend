@@ -13,6 +13,16 @@ export interface LoginResponse {
   status: string;
 }
 
+// Refresh endpoint returns a different shape than login — note the field is
+// `accessToken` here, not `jwt`. Keep this separate from LoginResponse so the
+// type system catches the mismatch.
+export interface RefreshResponse {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpiresAt: string;
+  refreshTokenExpiresAt: string;
+}
+
 export interface SignupRequest {
   username: string;
   email: string;

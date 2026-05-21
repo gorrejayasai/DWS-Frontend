@@ -52,7 +52,8 @@ a{text-decoration:none;color:inherit}
 .topbar-sub{font-size:.8rem;color:#6B7280;margin-top:1px}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .admin-badge{background:linear-gradient(135deg,#6C63FF,#8B5CF6);color:#fff;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px}
-.topbar-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#8B5CF6);display:grid;place-items:center;font-size:.8rem;font-weight:700;color:#fff}
+.topbar-av{width:36px;height:36px;border:none;padding:0;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#8B5CF6);display:grid;place-items:center;font-size:.8rem;font-weight:700;color:#fff;cursor:pointer;font-family:inherit;transition:transform .15s}
+.topbar-av:hover{transform:scale(1.05)}
 .content{padding:32px;flex:1}
 
 /* TOPBAR ACTIONS */

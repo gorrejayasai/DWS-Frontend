@@ -14,9 +14,9 @@
         <span class="nav-name">PayVault</span>
       </a>
       <div class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#how" class="nav-link">How It Works</a>
-        <a href="#security" class="nav-link">Security</a>
+        <a href="#features" class="nav-link" (click)="scrollToSection($event, 'features')">Features</a>
+        <a href="#how" class="nav-link" (click)="scrollToSection($event, 'how')">How It Works</a>
+        <a href="#security" class="nav-link" (click)="scrollToSection($event, 'security')">Security</a>
       </div>
       <div class="nav-actions">
         @if (isLoggedIn) {
@@ -58,7 +58,7 @@
               Open Free Account
             </a>
           }
-          <a href="#how" class="btn btn-outline btn-lg">See How It Works</a>
+          <a href="#how" class="btn btn-outline btn-lg" (click)="scrollToSection($event, 'how')">See How It Works</a>
         </div>
         <div class="hero-trust">
           <div class="trust-avatars">
@@ -347,9 +347,9 @@
       <div class="fcol">
         <h5>Product</h5>
         <div class="flinks">
-          <a href="#features" class="flink">Features</a>
-          <a href="#how" class="flink">How It Works</a>
-          <a href="#security" class="flink">Security</a>
+          <a href="#features" class="flink" (click)="scrollToSection($event, 'features')">Features</a>
+          <a href="#how" class="flink" (click)="scrollToSection($event, 'how')">How It Works</a>
+          <a href="#security" class="flink" (click)="scrollToSection($event, 'security')">Security</a>
         </div>
       </div>
       <div class="fcol">

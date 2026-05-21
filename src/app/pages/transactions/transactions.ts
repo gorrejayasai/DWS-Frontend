@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { AuthService } from '../../core/services/auth.service';
@@ -18,7 +17,7 @@ import { TopbarComponent } from "../../shared/components/topbar/topbar";
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent, TopbarComponent],
   templateUrl: './transactions.html',
   styleUrl: './transactions.css',
 })
@@ -210,8 +209,6 @@ export class TransactionsComponent implements OnInit {
   }
 
   txSign(tx: TransactionResponse): string {
-    // console.log(tx.targetUserId);
-    // console.log(this.currentUserId);
     if (tx.type === 'TOPUP') return '+';
     if (tx.type === 'TRANSFER' && tx.targetUserId === this.currentUserId) return '+';
     return '-';

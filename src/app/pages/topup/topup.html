@@ -54,6 +54,41 @@
             }
           </div>
 
+          <!-- Payment method (UI only — no gateway integration yet) -->
+          <div class="pm-section">
+            <label class="form-label pm-title">Payment Method</label>
+            <div class="pm-grid">
+              @for (m of paymentMethods; track m.id) {
+                <button
+                  type="button"
+                  class="pm-card"
+                  [class.pm-selected]="selectedMethod === m.id"
+                  (click)="selectMethod(m.id)"
+                >
+                  <div class="pm-top">
+                    @if (m.id === 'netbanking') {
+                      <span class="pm-icon-card" aria-hidden="true">
+                        <span class="pm-dot pm-dot-1"></span>
+                        <span class="pm-dot pm-dot-2"></span>
+                      </span>
+                    } @else {
+                      <span class="pm-badge" [class]="m.badgeCls">{{ m.badge }}</span>
+                    }
+                    @if (selectedMethod === m.id) {
+                      <span class="pm-check" aria-hidden="true">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                          <path d="M2.5 6l2.5 2.5 4.5-5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    }
+                  </div>
+                  <div class="pm-label">{{ m.label }}</div>
+                  <div class="pm-sub">{{ m.sublabel }}</div>
+                </button>
+              }
+            </div>
+          </div>
+
           <button class="btn-full" [disabled]="!canSubmit" (click)="onSubmit()">
             @if (loading) {
               <div class="btn-spinner"></div>
